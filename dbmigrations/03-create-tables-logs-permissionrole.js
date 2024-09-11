@@ -4,6 +4,17 @@
  */
 exports.up = function (knex) {
     return knex.schema
+    .createTable("user_subject", (table) => {  
+      table.increments("user_subject_id").primary();
+      table.integer("user_id").references("user_id").inTable("user");
+      table.integer("subject_id").references("subject_id").inTable("subject");
+      table.string("name");
+      table.string("password");
+      table.string("email");
+      table.integer("created_by");
+      table.timestamp("created_at", { useTz: true }).notNullable();
+      table.timestamp("updated_at", { useTz: true }).notNullable();
+    })
       .createTable("user_log", (table) => {  
         table.increments("user_log_id").primary();
         table.integer("user_id").references("user_id").inTable("user");
@@ -41,7 +52,7 @@ exports.up = function (knex) {
           })
           .createTable("user_subject_log", (table) => {  
             table.increments("user_subject_log_id").primary();
-            table.integer("user_subject_id");
+            table.integer("user_subject_id").references("user_subject_id").inTable("user_subject");
             table.integer("user_id");
             table.integer("subject_id");
             table.integer("updated_by");
@@ -50,7 +61,7 @@ exports.up = function (knex) {
           })
           .createTable("place_log", (table) => {  
             table.increments("place_log_id").primary();
-            table.integer("place_id");
+            table.integer("place_id").references("place_id").inTable("place");
             table.integer("subject_id");
             table.string("place_name");
             table.string("place_desc");

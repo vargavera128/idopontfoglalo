@@ -4,6 +4,16 @@
  */
 exports.up = function (knex) {
     return knex.schema
+    .createTable("subject", (table) => {  //create new user table
+      table.increments("subject_id").primary();
+      table.string("subject_name");
+      table.string("subject_level");
+      table.string("subject_lang");
+      table.string("subject_desc");
+      table.string("subject_type");
+      table.integer("subject_price");
+      table.timestamp("created_at", { useTz: true }).notNullable();
+    })
       .createTable("user", (table) => {  //create new user table
         table.increments("user_id").primary();
         table.string("username");
@@ -15,7 +25,7 @@ exports.up = function (knex) {
   
       .createTable("place", (table) => {  //create new user table
         table.increments("place_id").primary();
-        table.integer("subject_id");
+        table.integer("subject_id").references("subject_id").inTable("subject");
         table.string("place_name");
         table.string("place_desc");
         table.timestamp("created_at", { useTz: true }).notNullable();
