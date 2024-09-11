@@ -4,7 +4,10 @@
  */
 exports.up = function (knex) {
     return knex.schema
+<<<<<<< HEAD
       //.raw('CREATE EXTENSION IF NOT EXISTS "postgis"')
+=======
+>>>>>>> e68efe70ffb65179947b47d7b3411c0475a882c0
       .createTable("user", (table) => {  //create new user table
         table.increments("user_id").primary();
         table.uuid("uuid").notNullable().unique();
