@@ -59,15 +59,6 @@ exports.up = function (knex) {
             table.timestamp("created_at", { useTz: true }).notNullable();
             table.timestamp("updated_at", { useTz: true }).notNullable();
           })
-          .createTable("place_log", (table) => {  
-            table.increments("place_log_id").primary();
-            table.integer("place_id").references("place_id").inTable("place");
-            table.integer("subject_id");
-            table.string("place_name");
-            table.string("place_desc");
-            table.timestamp("created_at", { useTz: true }).notNullable();
-            table.timestamp("updated_at", { useTz: true }).notNullable();
-          })
           .createTable("role_permission", (table) => {  
             table.increments("role_permission_id").primary();
             table.integer("role_id").references("role_id").inTable("role");

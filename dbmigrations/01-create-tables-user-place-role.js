@@ -22,15 +22,7 @@ exports.up = function (knex) {
         table.string("email");
         table.timestamp("created_at", { useTz: true }).notNullable();
       })
-  
-      .createTable("place", (table) => {  //create new user table
-        table.increments("place_id").primary();
-        table.integer("subject_id").references("subject_id").inTable("subject");
-        table.string("place_name");
-        table.string("place_desc");
-        table.timestamp("created_at", { useTz: true }).notNullable();
-      })
-      
+
       .createTable("role", (table) => {  //create new user table
         table.increments("role_id").primary();
         table.string("role_name");
