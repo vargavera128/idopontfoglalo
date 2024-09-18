@@ -7,9 +7,10 @@ exports.up = function (knex) {
       .createTable("timetable", (table) => {  //create new user table
         table.increments("timetable_id").primary();
         table.integer("subject_id").references("subject_id").inTable("subject");
-        table.string("timateble_day");
-        table.boolean("timateble_bool");
-        table.timestamp("timateble_time").notNullable();
+        table.string("timetable_day");
+        table.boolean("timetable_bool");
+        table.time('start_time').notNullable();
+        table.time('end_time').notNullable();
         table.timestamp("created_at", { useTz: true }).notNullable();
       })
       .createTable("permission", (table) => {  //create new user table

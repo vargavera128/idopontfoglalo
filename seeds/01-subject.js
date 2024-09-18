@@ -71,7 +71,7 @@ exports.seed = async function (knex) {
   
         await knex("subject").insert([  //create dev user
           {
-            subject_name: "matematika",
+            subject_name: "fizika",
             subject_level: "egyetem",
             subject_lang: "magyar",
             subject_desc: "Fizika óra egyetemistáknak",
