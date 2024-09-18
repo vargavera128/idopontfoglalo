@@ -25,13 +25,14 @@ exports.seed = async function (knex) {
         created_at: new Date(),
       },
     ]);
-/*
+
     await knex("timetable").insert([  //create dev user
         {
           subject_id: "06",
           timetable_day: "Hétfő",
           timetable_bool: false,
-          timetable_time: '[09:00,10:00]',
+          start_time: '09:00',
+          end_time: '10:00',
           created_at: new Date(),
         },
       ]);
@@ -41,7 +42,8 @@ exports.seed = async function (knex) {
           subject_id: "09",
           timetable_day: "Hétfő",
           timetable_bool: false,
-          timetable_time: '[10:00,11:00]',
+          start_time: '10:00',
+          end_time: '11:00',
           created_at: new Date(),
         },
       ]);
@@ -51,7 +53,9 @@ exports.seed = async function (knex) {
           subject_id: "01",
           timetable_day: "Hétfő",
           timetable_bool: false,
-          timetable_time: '[13:00,14:00]',
+          timetable_bool: false,
+          start_time: '13:00',
+          end_time: '14:00',
           created_at: new Date(),
         },
       ]);
@@ -61,7 +65,8 @@ exports.seed = async function (knex) {
           subject_id: "02",
           timetable_day: "Hétfő",
           timetable_bool: false,
-          timetable_time: '[14:00,15:00]',
+          start_time: '14:00',
+          end_time: '15:00',
           created_at: new Date(),
         },
       ]);
@@ -71,7 +76,8 @@ exports.seed = async function (knex) {
           subject_id: "11",
           timetable_day: "Hétfő",
           timetable_bool: false,
-          timetable_time: '[15:00,16:00]',
+          start_time: '15:00',
+          end_time: '16:00',
           created_at: new Date(),
         },
       ]);
@@ -81,7 +87,8 @@ exports.seed = async function (knex) {
           subject_id: "10",
           timetable_day: "Kedd",
           timetable_bool: false,
-          timetable_time: '[13:00,14:00]',
+          start_time: '13:00',
+          end_time: '14:00',
           created_at: new Date(),
         },
       ]);
@@ -91,7 +98,8 @@ exports.seed = async function (knex) {
           subject_id: "08",
           timetable_day: "Kedd",
           timetable_bool: false,
-          timetable_time: '[14:00,15:00]',
+          start_time: '14:00',
+          end_time: '15:00',
           created_at: new Date(),
         },
       ]);
@@ -101,7 +109,8 @@ exports.seed = async function (knex) {
           subject_id: "09",
           timetable_day: "Kedd",
           timetable_bool: false,
-          timetable_time: '[15:00,16:00]',
+          start_time: '15:00',
+          end_time: '16:00',
           created_at: new Date(),
         },
       ]);
@@ -210,8 +219,13 @@ exports.seed = async function (knex) {
             subject_id: "11",
             timetable_day: "Csütörtök",
             timetable_bool: false,
+<<<<<<< HEAD
             start_time: '13:00',
             end_time: '14:00',
+=======
+            start_time: "13:00",
+            end_time: "14:00",
+>>>>>>> d3b5f1497dca1db4864f75c34ca79e3696f9b2e0
             created_at: new Date(),
           },
         ]);
@@ -221,7 +235,8 @@ exports.seed = async function (knex) {
             subject_id: "01",
             timetable_day: "Csütörtök",
             timetable_bool: false,
-            timetable_time: '[14:00,15:00]',
+            start_time: "14:00",
+            end_time: "15:00",
             created_at: new Date(),
           },
         ]);
@@ -231,7 +246,8 @@ exports.seed = async function (knex) {
             subject_id: "04",
             timetable_day: "Csütörtök",
             timetable_bool: false,
-            timetable_time: '[15:00,16:00]',
+            start_time: "15:00",
+            end_time: "16:00",
             created_at: new Date(),
           },
         ]);
@@ -241,7 +257,8 @@ exports.seed = async function (knex) {
             subject_id: "05",
             timetable_day: "Csütörtök",
             timetable_bool: false,
-            timetable_time: '[16:00,17:00]',
+            start_time: "16:00",
+            end_time: "17:00",
             created_at: new Date(),
           },
         ]);
@@ -251,7 +268,8 @@ exports.seed = async function (knex) {
             subject_id: "10",
             timetable_day: "Csütörtök",
             timetable_bool: false,
-            timetable_time: '[17:00,18:00]',
+            start_time: "17:00",
+            end_time: "18:00",
             created_at: new Date(),
           },
         ]);
@@ -261,7 +279,8 @@ exports.seed = async function (knex) {
             subject_id: "07",
             timetable_day: "Csütörtök",
             timetable_bool: false,
-            timetable_time: '[18:00,19:00]',
+            start_time: "18:00",
+            end_time: "19:00",
             created_at: new Date(),
           },
         ]);
@@ -271,7 +290,8 @@ exports.seed = async function (knex) {
             subject_id: "03",
             timetable_day: "Péntek",
             timetable_bool: false,
-            timetable_time: '[08:00,09:00]',
+            start_time: "8:00",
+            end_time: "9:00",
             created_at: new Date(),
           },
         ]);
@@ -281,7 +301,8 @@ exports.seed = async function (knex) {
               subject_id: "03",
               timetable_day: "Péntek",
               timetable_bool: false,
-              timetable_time: '[09:00,10:00]',
+              start_time: "9:00",
+              end_time: "10:00",
               created_at: new Date(),
             },
           ]);
@@ -291,7 +312,8 @@ exports.seed = async function (knex) {
               subject_id: "09",
               timetable_day: "Péntek",
               timetable_bool: false,
-              timetable_time: '[10:00,11:00]',
+              start_time: "10:00",
+              end_time: "11:00",
               created_at: new Date(),
             },
           ]);
@@ -301,7 +323,8 @@ exports.seed = async function (knex) {
               subject_id: "06",
               timetable_day: "Péntek",
               timetable_bool: false,
-              timetable_time: '[13:00,14:00]',
+              start_time: "13:00",
+              end_time: "14:00",
               created_at: new Date(),
             },
           ]);
@@ -311,7 +334,8 @@ exports.seed = async function (knex) {
               subject_id: "06",
               timetable_day: "Péntek",
               timetable_bool: false,
-              timetable_time: '[14:00,15:00]',
+              start_time: "14:00",
+              end_time: "15:00",
               created_at: new Date(),
             },
           ]);
@@ -321,11 +345,11 @@ exports.seed = async function (knex) {
               subject_id: "11",
               timetable_day: "Péntek",
               timetable_bool: false,
-              timetable_time: '[15:00,16:00]',
+              start_time: "15:00",
+              end_time: "16:00",
               created_at: new Date(),
             },
           ]);
-*/
   };
 
   
