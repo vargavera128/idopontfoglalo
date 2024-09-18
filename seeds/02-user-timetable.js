@@ -336,7 +336,6 @@ exports.seed = async function (knex) {
               created_at: new Date(),
             },
           ]);
-*/
   };
 
   
