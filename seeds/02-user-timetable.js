@@ -219,13 +219,8 @@ exports.seed = async function (knex) {
             subject_id: "11",
             timetable_day: "Csütörtök",
             timetable_bool: false,
-<<<<<<< HEAD
-            start_time: '13:00',
-            end_time: '14:00',
-=======
             start_time: "13:00",
             end_time: "14:00",
->>>>>>> d3b5f1497dca1db4864f75c34ca79e3696f9b2e0
             created_at: new Date(),
           },
         ]);
