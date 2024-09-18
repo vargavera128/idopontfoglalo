@@ -22,8 +22,10 @@ fastify.decorate("authenticate", async function (request, reply) {
 
 module.exports = { fastify, knex };
 
-/*
+
 const user = require("./routes/user.js");
+
+/*
 const user_change_log = require("./routes/user_change_log.js");
 const organization = require("./routes/organization.js");
 const organization_change_log = require("./routes/organization_change_log.js");
@@ -61,6 +63,19 @@ const start = async () => {
   }
 
   await knex.migrate.latest({ directory: "dbmigrations" });
+
+  fastify.register(user);
+  
+  /*
+  dgfWKGZIARUGITPOJOIRHGWPURGA
+    dgfWKGZIARUGITPOJOIRHGWPURGA
+      dgfWKGZIARUGITPOJOIRHGWPURGA
+        dgfWKGZIARUGITPOJOIRHGWPURGA
+          dgfWKGZIARUGITPOJOIRHGWPURGA
+            dgfWKGZIARUGITPOJOIRHGWPURGA
+              dgfWKGZIARUGITPOJOIRHGWPURGA
+                dgfWKGZIARUGITPOJOIRHGWPURGA
+  */
 
 
   fastify.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
