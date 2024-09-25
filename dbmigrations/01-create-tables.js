@@ -63,7 +63,6 @@ exports.up = function (knex) {
         table.string("email");
         table.integer("created_by");
         table.timestamp("created_at", { useTz: true }).notNullable();
-        table.timestamp("updated_at", { useTz: true }).notNullable();
       })
       .createTable("timetable_log", (table) => {  // Create new timetable_log table
         table.increments("timetable_log_id").primary();
@@ -75,7 +74,6 @@ exports.up = function (knex) {
         table.integer("updated_by");
         table.timestamp("timetable_time", { useTz: true }).notNullable();
         table.timestamp("created_at", { useTz: true }).notNullable();
-        table.timestamp("updated_at", { useTz: true }).notNullable();
       })
       .createTable("subject_log", (table) => {  // Create new subject_log table
         table.increments("subject_log_id").primary();
@@ -87,7 +85,6 @@ exports.up = function (knex) {
         table.string("subject_type");
         table.integer("subject_price");
         table.timestamp("created_at", { useTz: true }).notNullable();
-        table.timestamp("updated_at", { useTz: true }).notNullable();
       })
       .createTable("user_subject_log", (table) => {  // Create new user_subject_log table
         table.increments("user_subject_log_id").primary();
@@ -96,7 +93,6 @@ exports.up = function (knex) {
         table.integer("subject_id");
         table.integer("updated_by");
         table.timestamp("created_at", { useTz: true }).notNullable();
-        table.timestamp("updated_at", { useTz: true }).notNullable();
       })
       .createTable("role_permission", (table) => {  // Create new role_permission table
         table.increments("role_permission_id").primary();
