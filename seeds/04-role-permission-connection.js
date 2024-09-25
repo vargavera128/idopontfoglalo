@@ -1,5 +1,11 @@
-await knex("role_permission").del();
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
 
+exports.seed = async function(knex) {
+
+await knex("role_permission").del();
 await knex("role_permission").insert([  // Role: Administrator (role_id: 1) - Full access
   { role_id: 1, permission_id: 1, created_at: new Date() },  // create user
   { role_id: 1, permission_id: 2, created_at: new Date() },  // create own user
@@ -56,3 +62,4 @@ await knex("role_permission").insert([  // Role: User (role_id: 3) - View-only a
   { role_id: 3, permission_id: 11, created_at: new Date() }, // get subject data
   { role_id: 3, permission_id: 14, created_at: new Date() }, // get time data
 ]);
+}
