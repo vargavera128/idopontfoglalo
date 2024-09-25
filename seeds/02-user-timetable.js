@@ -6,10 +6,24 @@ exports.seed = async function (knex) {
   await knex("user").del();
   await knex("user").insert([  //create user
     {
+      username: "admin",
+      name: "admin",
+      password: "admin",
+      email: "admin@email.com",
+      created_at: new Date(),
+    },
+    {
       username: "tanar",
       name: "teszt tanar",
       password: "tanar",
       email: "tanar@email.com",
+      created_at: new Date(),
+    },
+    {
+      username: "user",
+      name: "teszt user",
+      password: "user",
+      email: "user@email.com",
       created_at: new Date(),
     },
   ]);

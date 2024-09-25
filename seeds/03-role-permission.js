@@ -11,22 +11,16 @@
             role_desc: "Teljes hozzáféréssel rendelkezik a weboldalhoz. Kezeli a felhasználókat, beállításokat, tartalmat, jogosultságokat stb. Technikai és szervezeti felelőssége is van.",
             created_at: new Date(),
           },
-        ]);
-        
-        await knex("role").insert([ 
-            {
-                role_name: "author",
-                role_desc: "Tartalmak létrehozásáért, szerkesztéséért és közzétételéért felelős. Lehetősége van új tantárgyakat, időpontokat publikálni, de nem fér hozzá a weboldal technikai beállításaihoz.",
-                created_at: new Date(),
-              },
-        ]);
-    
-        await knex("role").insert([ 
-            {
-                role_name: "user",
-                role_desc: "Általános látogató, aki regisztrálhat vagy bejelentkezhet, hogy hozzáférjen személyes funkciókhoz (pl. időpontra jelentkezés). Nem rendelkezik adminisztratív vagy tartalmi hozzáféréssel.",
-                created_at: new Date(),
-              },
+          {
+            role_name: "author",
+            role_desc: "Tartalmak létrehozásáért, szerkesztéséért és közzétételéért felelős. Lehetősége van új tantárgyakat, időpontokat publikálni, de nem fér hozzá a weboldal technikai beállításaihoz.",
+            created_at: new Date(),
+          },
+          {
+            role_name: "user",
+            role_desc: "Általános látogató, aki regisztrálhat vagy bejelentkezhet, hogy hozzáférjen személyes funkciókhoz (pl. időpontra jelentkezés). Nem rendelkezik adminisztratív vagy tartalmi hozzáféréssel.",
+            created_at: new Date(),
+          },
         ]);
 
 
@@ -156,6 +150,25 @@
             permission_desc: "Napló adatok lekérése (minden napló tábla)",
             created_at: new Date(),
           }
+        ]);
+
+        await knex("user_role").del();
+        await knex("user_role").insert([  //create user_role connections
+          {
+            user_id: 1,
+            role_id: 1,
+            created_at: new Date(),
+          },
+          {
+            user_id: 2,
+            role_id: 2,
+            created_at: new Date(),
+          },
+          {
+            user_id: 3,
+            role_id: 3,
+            created_at: new Date(),
+          },
         ]);
     };
       
