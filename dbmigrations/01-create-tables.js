@@ -68,7 +68,8 @@ exports.up = function (knex) {
         table.integer("subject_id");
         table.string("timetable_day");
         table.boolean("timetable_bool");
-        table.timestamp("timetable_time", { useTz: true }).notNullable();
+        table.time('start_time').notNullable();
+        table.time('end_time').notNullable();
         table.integer("created_by");
         table.timestamp("created_at", { useTz: true }).notNullable();
       })
