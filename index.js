@@ -25,7 +25,9 @@ module.exports = { fastify, knex };
 
 const user = require("./routes/user.js");
 const subject = require("./routes/subject.js");
-const permission=require("./routes/permission.js");
+const permission = require("./routes/permission.js");
+const user_log = require("./routes/user_log.js");
+const timetable_log = require("./routes/timetable_log.js");
 /*
 const user_change_log = require("./routes/user_change_log.js");
 const organization = require("./routes/organization.js");
@@ -68,6 +70,8 @@ const start = async () => {
   fastify.register(user);
   fastify.register(subject);
   fastify.register(permission);
+  fastify.register(user_log);
+  fastify.register(timetable_log);
   /*
   dgfWKGZIARUGITPOJOIRHGWPURGA
     dgfWKGZIARUGITPOJOIRHGWPURGA
