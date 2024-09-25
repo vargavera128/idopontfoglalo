@@ -91,8 +91,8 @@
             created_at: new Date(),
           },
           {
-            permission_name: "update time",
-            permission_desc: "Időpont frissítése",
+            permission_name: "get time data",
+            permission_desc: "Időpont adatainak lekérése",
             created_at: new Date(),
           },
           {
@@ -121,8 +121,8 @@
             created_at: new Date(),
           },
           {
-            permission_name: "update role",
-            permission_desc: "Szerepkör frissítése",
+            permission_name: "get role data",
+            permission_desc: "Szerepkör adatainak lekérése",
             created_at: new Date(),
           },
           {
@@ -136,8 +136,8 @@
             created_at: new Date(),
           },
           {
-            permission_name: "update permission",
-            permission_desc: "Jogosultság frissítése",
+            permission_name: "edit permission",
+            permission_desc: "Jogosultság szerkesztése",
             created_at: new Date(),
           },
           {
