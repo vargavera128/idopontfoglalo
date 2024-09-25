@@ -17,17 +17,17 @@ exports.seed = async function (knex) {
     ]);
 
 
-    await knex("subject").insert([  //create dev user
-        {
-          subject_name: "matematika",
-          subject_level: "középiskola",
-          subject_lang: "magyar",
-          subject_desc: "Matematika óra középiskolásoknak",
-          subject_type: "online",
-          subject_price:6000,
-          created_at: new Date(),
-        },
-      ]);
+      await knex("subject").insert([  //create dev user
+          {
+            subject_name: "matematika",
+            subject_level: "középiskola",
+            subject_lang: "magyar",
+            subject_desc: "Matematika óra középiskolásoknak",
+            subject_type: "online",
+            subject_price:6000,
+            created_at: new Date(),
+          },
+        ]);
 
 
       await knex("subject").insert([  //create dev user

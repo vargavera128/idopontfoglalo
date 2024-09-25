@@ -24,7 +24,8 @@ module.exports = { fastify, knex };
 
 
 const user = require("./routes/user.js");
-
+const subject = require("./routes/subject.js");
+const permission=require("./routes/permission.js");
 /*
 const user_change_log = require("./routes/user_change_log.js");
 const organization = require("./routes/organization.js");
@@ -65,7 +66,8 @@ const start = async () => {
   await knex.migrate.latest({ directory: "dbmigrations" });
 
   fastify.register(user);
-  
+  fastify.register(subject);
+  fastify.register(permission);
   /*
   dgfWKGZIARUGITPOJOIRHGWPURGA
     dgfWKGZIARUGITPOJOIRHGWPURGA
