@@ -1,5 +1,4 @@
 const { knex } = require("../index.js");
-const { fastify } = require("../index.js");
 
 const getSubject = async (req, reply) => {  //get all subjects
   try {
@@ -24,7 +23,7 @@ const getSubjectLevel = async (req, reply) => {  //get subject by subject level
     const { subject_level } = req.params;
     try {
       const subjects = await knex("subject").select("*").where({ subject_level: subject_level });
-      reply.send(subjects);  // Küldje vissza az összes találatot
+      reply.send(subjects);  
     } catch (error) {
       reply.send(error);
     }
@@ -33,7 +32,7 @@ const getSubjectLevel = async (req, reply) => {  //get subject by subject level
 
 const addSubject = async (req, reply) => {  //add new subject
     const { subject_name, subject_level, subject_lang, subject_desc, subject_type, subject_price } = req.body;
-    const created_at = new Date();  // hozzáadjuk az aktuális időt
+    const created_at = new Date();  
     try {
       const newSubject = await knex("subject")
         .insert({
@@ -43,7 +42,7 @@ const addSubject = async (req, reply) => {  //add new subject
           subject_desc,
           subject_type,
           subject_price,
-          created_at,  // beállítjuk a létrehozás idejét
+          created_at,  
         })
         .returning('*');
       reply.code(201).send(newSubject);
@@ -60,7 +59,6 @@ const addSubject = async (req, reply) => {  //add new subject
     const { subject_desc } = req.body;
     const { subject_type } = req.body;
     const { subject_price } = req.body;
-    const { pbkdf2 } = await import("crypto");
     const subject = await knex("subject").where({ subject_id: subject_id });
     let subjectUpdate;
     try {
@@ -72,6 +70,7 @@ const addSubject = async (req, reply) => {  //add new subject
           subject_level:subject_level,
           subject_lang:subject_lang,
           subject_desc:subject_desc,
+          subject_type: subject_type,
           subject_price:subject_price
         });
       reply.code(200).send({ message: `Successfull edit` });
