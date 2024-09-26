@@ -165,12 +165,15 @@ const loginUserByEmail = async (req, reply) => {  //login by email
           async (err, derivedKey) => {
             if (err) throw err;
             hash = derivedKey.toString("hex");
+            console.log("HASH: ", hash);
+            console.log("PASS: ", userData[0].password);
+
             hash === userData[0].password ? resolve(true) : resolve(false);
           }
         );
       });
       if (correct) {
-        const token = fastify.jwt.sign(userData, { expiresIn: "24h" });
+        const token = fastify.jwt.sign({ user_id: user.user_id, username: user.username }, { expiresIn: "24h" });
         reply.code(201).send({ message: `Successfull login!`, jwt: token });
       } else {
         reply.code(201).send({ message: `Wrong Username or password.` });
@@ -185,7 +188,7 @@ const loginUserByUsername = async (req, reply) => {  //login by username
   const { username } = req.body;
   const { password } = req.body;
   try {
-    const userData = await knex("users").select("*").where({ username: username });
+    const userData = await knex("user").select("*").where({ username: username });
     let hash;
     if (userData.length > 0) {
       let correct = await new Promise((resolve, reject) => {
@@ -198,12 +201,14 @@ const loginUserByUsername = async (req, reply) => {  //login by username
           async (err, derivedKey) => {
             if (err) throw err;
             hash = derivedKey.toString("hex");
+            console.log("HASH: ", hash);
+            console.log("PASS: ", userData[0].password);
             hash === userData[0].password ? resolve(true) : resolve(false);
           }
         );
       });
       if (correct) {
-        const token = fastify.jwt.sign(userData, { expiresIn: "24h" });
+        const token = fastify.jwt.sign({ user_id: user.user_id, username: user.username }, { expiresIn: "24h" });
         reply.code(201).send({ message: `Successfull login!`, jwt: token });
       } else {
         reply.code(201).send({ message: `Wrong Username or password.` });
