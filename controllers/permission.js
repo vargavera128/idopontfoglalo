@@ -23,13 +23,13 @@ const getPermissionById = async (req, reply) => {  //get permission by id
 
 const addPermission = async (req, reply) => {  //add new permission
     const { permission_name, permission_desc } = req.body;
-    const created_at = new Date();  // hozzáadjuk az aktuális időt
+    const created_at = new Date();  
     try {
       const newPermission = await knex("permission")
         .insert({
           permission_name,
           permission_desc,
-          created_at,  // beállítjuk a létrehozás idejét
+          created_at,  
         })
         .returning('*');
       reply.code(201).send(newPermission);
@@ -42,7 +42,6 @@ const addPermission = async (req, reply) => {  //add new permission
     const { permission_id } = req.params;
     const { permission_name } = req.body;
     const { permission_desc } = req.body;
-    const { pbkdf2 } = await import("crypto");
     const permission = await knex("permission").where({ permission_id: permission_id });
     let permissionUpdate;
     try {
