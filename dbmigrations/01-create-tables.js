@@ -47,9 +47,6 @@ exports.up = function (knex) {
         table.increments("user_subject_id").primary();
         table.integer("user_id").references("user_id").inTable("user");
         table.integer("subject_id").references("subject_id").inTable("subject");
-        table.string("name");
-        table.string("password");
-        table.string("email");
         table.timestamp("created_at", { useTz: true }).notNullable();
       })
       .createTable("user_log", (table) => {  // Create new user_log table
