@@ -39,7 +39,7 @@ const {
 
   const getRoleOpts = { // Options for get one role
     schema: {
-      description: "Get time by id of the subject",
+      description: "Get time by name of the role",
       response: {
         200: Role,
       },

@@ -3,348 +3,272 @@
  * @returns { Promise<void> }
  */
 exports.seed = async function (knex) {
-    await knex("user").del();
-    await knex("user").insert([  //create dev user
-      {
-        username: "tanar",
-        name: "teszt tanar",
-        password: "tanar",
-        email: "tanar@email.com",
-        created_at: new Date(),
-      },
-    ]);
-    
-    await knex("timetable").del();
-    await knex("timetable").insert([  //create dev user
-      {
-        subject_id: "03",
-        timetable_day: "Hétfő",
-        timetable_bool: false,
-        start_time: '08:00',
-        end_time: '09:00',
-        created_at: new Date(),
-      },
-    ]);
+  await knex("user").del();
+  await knex("user").insert([  //create user
+    {
+      username: "admin",
+      name: "admin",
+      password: "3f881e02e136c97fcf0d11ee252abbe05179bceefcdab5b3e5cd0b0103d1f26e390c460038d86ed70627027eb43d23728e872a10176709e28225f2b7b0acae5b",  //admin
+      email: "admin@email.com",
+      created_at: new Date(),
+    },
+    {
+      username: "tanar",
+      name: "teszt tanar",
+      password: "745047c487c4c7f3c27f23ed490d2f427f0295cc1303bb5e31ce353c229abccd46495e7d2d4f7683cc4b2415d54f289657496728bed3a00f0a96c2a437334444",  //tanar
+      email: "tanar@email.com",
+      created_at: new Date(),
+    },
+    {
+      username: "user",
+      name: "teszt user",
+      password: "bc35b296699eea3359115289b40c56c14b1886c768dd813c31aea4a206546d3e2f33ef5ffb2cb2c971a299d78d05d3d7909dc6039abd67eaea15cc11e4328450",  //user
+      email: "user@email.com",
+      created_at: new Date(),
+    },
+  ]);
 
-    await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "06",
-          timetable_day: "Hétfő",
-          timetable_bool: false,
-          start_time: '09:00',
-          end_time: '10:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "09",
-          timetable_day: "Hétfő",
-          timetable_bool: false,
-          start_time: '10:00',
-          end_time: '11:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "01",
-          timetable_day: "Hétfő",
-          timetable_bool: false,
-          timetable_bool: false,
-          start_time: '13:00',
-          end_time: '14:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "02",
-          timetable_day: "Hétfő",
-          timetable_bool: false,
-          start_time: '14:00',
-          end_time: '15:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "11",
-          timetable_day: "Hétfő",
-          timetable_bool: false,
-          start_time: '15:00',
-          end_time: '16:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "10",
-          timetable_day: "Kedd",
-          timetable_bool: false,
-          start_time: '13:00',
-          end_time: '14:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "08",
-          timetable_day: "Kedd",
-          timetable_bool: false,
-          start_time: '14:00',
-          end_time: '15:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "09",
-          timetable_day: "Kedd",
-          timetable_bool: false,
-          start_time: '15:00',
-          end_time: '16:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "12",
-          timetable_day: "Kedd",
-          timetable_bool: false,
-          start_time: '16:00',
-          end_time: '17:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "12",
-          timetable_day: "Kedd",
-          timetable_bool: false,
-          start_time: '17:00',
-          end_time: '18:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "07",
-          timetable_day: "Kedd",
-          timetable_bool: false,
-          start_time: '18:00',
-          end_time: '19:00',
-          created_at: new Date(),
-        },
-      ]);
-
-      await knex("timetable").insert([  //create dev user
-        {
-          subject_id: "03",
-          timetable_day: "Szerda",
-          timetable_bool: false,
-          start_time: '08:00',
-          end_time: '09:00',
-          created_at: new Date(),
-        },
-      ]);
-  
-      await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "06",
-            timetable_day: "Szerda",
-            timetable_bool: false,
-            start_time: '09:00',
-            end_time: '10:00',
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "09",
-            timetable_day: "Szerda",
-            timetable_bool: false,
-            start_time: '10:00',
-            end_time: '11:00',
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "01",
-            timetable_day: "Szerda",
-            timetable_bool: false,
-            start_time: '13:00',
-            end_time: '14:00',
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "02",
-            timetable_day: "Szerda",
-            timetable_bool: false,
-            start_time: '14:00',
-            end_time: '15:00',
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "11",
-            timetable_day: "Szerda",
-            timetable_bool: false,
-            start_time: '15:00',
-            end_time: '16:00',
-            created_at: new Date(),
-          },
-        ]);
-
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "11",
-            timetable_day: "Csütörtök",
-            timetable_bool: false,
-            start_time: "13:00",
-            end_time: "14:00",
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "01",
-            timetable_day: "Csütörtök",
-            timetable_bool: false,
-            start_time: "14:00",
-            end_time: "15:00",
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "04",
-            timetable_day: "Csütörtök",
-            timetable_bool: false,
-            start_time: "15:00",
-            end_time: "16:00",
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "05",
-            timetable_day: "Csütörtök",
-            timetable_bool: false,
-            start_time: "16:00",
-            end_time: "17:00",
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "10",
-            timetable_day: "Csütörtök",
-            timetable_bool: false,
-            start_time: "17:00",
-            end_time: "18:00",
-            created_at: new Date(),
-          },
-        ]);
-  
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "07",
-            timetable_day: "Csütörtök",
-            timetable_bool: false,
-            start_time: "18:00",
-            end_time: "19:00",
-            created_at: new Date(),
-          },
-        ]);
-
-        await knex("timetable").insert([  //create dev user
-          {
-            subject_id: "03",
-            timetable_day: "Péntek",
-            timetable_bool: false,
-            start_time: "8:00",
-            end_time: "9:00",
-            created_at: new Date(),
-          },
-        ]);
-    
-        await knex("timetable").insert([  //create dev user
-            {
-              subject_id: "03",
-              timetable_day: "Péntek",
-              timetable_bool: false,
-              start_time: "9:00",
-              end_time: "10:00",
-              created_at: new Date(),
-            },
-          ]);
-    
-          await knex("timetable").insert([  //create dev user
-            {
-              subject_id: "09",
-              timetable_day: "Péntek",
-              timetable_bool: false,
-              start_time: "10:00",
-              end_time: "11:00",
-              created_at: new Date(),
-            },
-          ]);
-    
-          await knex("timetable").insert([  //create dev user
-            {
-              subject_id: "06",
-              timetable_day: "Péntek",
-              timetable_bool: false,
-              start_time: "13:00",
-              end_time: "14:00",
-              created_at: new Date(),
-            },
-          ]);
-    
-          await knex("timetable").insert([  //create dev user
-            {
-              subject_id: "06",
-              timetable_day: "Péntek",
-              timetable_bool: false,
-              start_time: "14:00",
-              end_time: "15:00",
-              created_at: new Date(),
-            },
-          ]);
-    
-          await knex("timetable").insert([  //create dev user
-            {
-              subject_id: "11",
-              timetable_day: "Péntek",
-              timetable_bool: false,
-              start_time: "15:00",
-              end_time: "16:00",
-              created_at: new Date(),
-            },
-          ]);
-  };
-
-  
+  await knex("timetable").del();
+  await knex("timetable").insert([  //create timetable
+    {
+      subject_id: "03",
+      timetable_day: "Hétfő",
+      timetable_bool: false,
+      start_time: '08:00',
+      end_time: '09:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "06",
+      timetable_day: "Hétfő",
+      timetable_bool: false,
+      start_time: '09:00',
+      end_time: '10:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "09",
+      timetable_day: "Hétfő",
+      timetable_bool: false,
+      start_time: '10:00',
+      end_time: '11:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "01",
+      timetable_day: "Hétfő",
+      timetable_bool: false,
+      start_time: '13:00',
+      end_time: '14:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "02",
+      timetable_day: "Hétfő",
+      timetable_bool: false,
+      start_time: '14:00',
+      end_time: '15:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "11",
+      timetable_day: "Hétfő",
+      timetable_bool: false,
+      start_time: '15:00',
+      end_time: '16:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "10",
+      timetable_day: "Kedd",
+      timetable_bool: false,
+      start_time: '13:00',
+      end_time: '14:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "08",
+      timetable_day: "Kedd",
+      timetable_bool: false,
+      start_time: '14:00',
+      end_time: '15:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "09",
+      timetable_day: "Kedd",
+      timetable_bool: false,
+      start_time: '15:00',
+      end_time: '16:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "12",
+      timetable_day: "Kedd",
+      timetable_bool: false,
+      start_time: '16:00',
+      end_time: '17:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "12",
+      timetable_day: "Kedd",
+      timetable_bool: false,
+      start_time: '17:00',
+      end_time: '18:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "07",
+      timetable_day: "Kedd",
+      timetable_bool: false,
+      start_time: '18:00',
+      end_time: '19:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "03",
+      timetable_day: "Szerda",
+      timetable_bool: false,
+      start_time: '08:00',
+      end_time: '09:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "06",
+      timetable_day: "Szerda",
+      timetable_bool: false,
+      start_time: '09:00',
+      end_time: '10:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "09",
+      timetable_day: "Szerda",
+      timetable_bool: false,
+      start_time: '10:00',
+      end_time: '11:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "01",
+      timetable_day: "Szerda",
+      timetable_bool: false,
+      start_time: '13:00',
+      end_time: '14:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "02",
+      timetable_day: "Szerda",
+      timetable_bool: false,
+      start_time: '14:00',
+      end_time: '15:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "11",
+      timetable_day: "Szerda",
+      timetable_bool: false,
+      start_time: '15:00',
+      end_time: '16:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "11",
+      timetable_day: "Csütörtök",
+      timetable_bool: false,
+      start_time: '13:00',
+      end_time: '14:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "01",
+      timetable_day: "Csütörtök",
+      timetable_bool: false,
+      start_time: '14:00',
+      end_time: '15:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "04",
+      timetable_day: "Csütörtök",
+      timetable_bool: false,
+      start_time: '15:00',
+      end_time: '16:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "05",
+      timetable_day: "Csütörtök",
+      timetable_bool: false,
+      start_time: '16:00',
+      end_time: '17:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "10",
+      timetable_day: "Csütörtök",
+      timetable_bool: false,
+      start_time: '17:00',
+      end_time: '18:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "07",
+      timetable_day: "Csütörtök",
+      timetable_bool: false,
+      start_time: '18:00',
+      end_time: '19:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "03",
+      timetable_day: "Péntek",
+      timetable_bool: false,
+      start_time: '08:00',
+      end_time: '09:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "03",
+      timetable_day: "Péntek",
+      timetable_bool: false,
+      start_time: '09:00',
+      end_time: '10:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "09",
+      timetable_day: "Péntek",
+      timetable_bool: false,
+      start_time: '10:00',
+      end_time: '11:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "06",
+      timetable_day: "Péntek",
+      timetable_bool: false,
+      start_time: '13:00',
+      end_time: '14:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "06",
+      timetable_day: "Péntek",
+      timetable_bool: false,
+      start_time: '14:00',
+      end_time: '15:00',
+      created_at: new Date(),
+    },
+    {
+      subject_id: "11",
+      timetable_day: "Péntek",
+      timetable_bool: false,
+      start_time: '15:00',
+      end_time: '16:00',
+      created_at: new Date(),
+    },
+  ]);
+};

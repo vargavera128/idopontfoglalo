@@ -14,7 +14,7 @@ const getRole = async (req, reply) => {  //get all times
 const getRolesById = async (req, reply) => {  //get roles by id
     const { role_id } = req.params;
     try {
-      const rola = await knex("role").select("*").where({ role_id: role_id });
+      const role = await knex("role").select("*").where({ role_id: role_id });
       reply.send(role[0]);
     } catch (error) {
       reply.send(error);
@@ -35,15 +35,11 @@ const getRolesById = async (req, reply) => {  //get roles by id
   const addNewRole = async (req, reply) => {  //add new role
     const { role_name } = req.body;
     const { role_desc } = req.body;
-    const { start_time } = req.body;
-    const { end_time } = req.body;
     
     try {
-      await knex("timetable").insert({      
+      await knex("role").insert({      
         role_name : role_name,
         role_desc: role_desc,
-        start_time: start_time,
-        end_time: end_time,
         created_at: knex.fn.now(),    
       });
   
@@ -69,10 +65,8 @@ const getRolesById = async (req, reply) => {  //get roles by id
 
   const updateRoleById = async (req, reply) => {  //update role by id
     const { role_id } = req.params;
-    const { role_name} = req.params;
+    const { role_name} = req.body;
     const { role_desc } = req.body;
-    const { start_time } = req.body;
-    const { end_time } = req.body;
     
     const role = await knex("role").where({ role_id: role_id });
     
@@ -82,8 +76,6 @@ const getRolesById = async (req, reply) => {  //get roles by id
           .update({
             role_name: role_name,
             role_desc: role_desc,
-            start_time: start_time,
-            end_time: end_time,
           });
         reply.code(200).send({ message: `Successfull edit` });
       } catch (error) {
