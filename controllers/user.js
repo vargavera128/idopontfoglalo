@@ -220,7 +220,22 @@ const loginUserByUsername = async (req, reply) => {  //login by username
 };
 
 const checkAuth = async (request, reply) => {  //checkAuth
-  reply.send(request.user);
+  user_id = request.user;
+  const userInfo = await knex('user')  //get user info
+      .select(
+        'user.username',
+        'role.role_name',
+        'role.role_desc',
+        'permission.permission_name',
+        'permission.permission_desc'
+      )
+      .leftJoin('user_role', 'user.user_id', 'user_role.user_id')
+      .leftJoin('role', 'user_role.role_id', 'role.role_id')
+      .leftJoin('role_permission', 'role.role_id', 'role_permission.role_id')
+      .leftJoin('permission', 'role_permission.permission_id', 'permission.permission_id')
+      .where('user.user_id', user_id)
+
+  reply.send(userInfo);
 };
 
 module.exports = {
