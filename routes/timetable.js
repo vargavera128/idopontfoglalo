@@ -7,6 +7,8 @@ const {
     deleteTimeBySubjectId,
     deleteTimeByDay,
     updateTimeById,
+    getFreeTimes,
+    getSubjectByDay,
     //checkAuth,
   } = require("../controllers/timetable.js");
   
@@ -131,6 +133,31 @@ const {
     },
     handler: updateTimeById,
   };
+  const getFreeTimes2 = { // get free times
+    schema: {
+      description: "Get free times",
+      response: {
+        200: {
+          type: "object",
+          properties: { message: { type: "string" } },
+        },
+      },
+    },
+    handler: getFreeTimes,
+  };
+
+  const getSubjectByDay2 = { // get subject by day
+    schema: {
+      description: "Get subject by day",
+      response: {
+        200: {
+          type: "object",
+          properties: { message: { type: "string" } },
+        },
+      },
+    },
+    handler: getSubjectByDay,
+  };
   
   function TimeRoutes(fastify, options, done) {
     fastify.get("/timetable", getTimesOpts);
@@ -141,7 +168,9 @@ const {
     fastify.delete("/timetable2/:subject_id", deleteTimeOptsTwo);
     fastify.delete("/timetable3/:timetable_day", deleteTimeOptsThree);
     fastify.put("/timetable/:timetable_id", updateTimeOpts);
-    // fastify.get("/checkAuth",checkAuthOpts)
+    fastify.get('/timetables/free-times', getFreeTimes),
+    fastify.get('/timetables/:timetable_day', getSubjectByDay);
+    
     done();
   }
   

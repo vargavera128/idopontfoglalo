@@ -135,20 +135,47 @@ const getTimesById = async (req, reply) => {  //get times by id
       }
   };
 
-  const checkAuth = async (request, reply) => {  //checkAuth
-    reply.send(request.timetable);
+  const getFreeTimes = async (request, reply) => {
+    const { timetable_id } = request.params;
+    try {
+      const timetableInfo = await knex('timetable')
+        .select('subject.subject_name', 'timetable.timetable_day', 'timetable.start_time', 'timetable.end_time')
+        .leftJoin('subject', 'timetable.subject_id', 'subject.subject_id')
+        .where('timetable.timetable_bool', false);  // Csak a szabad időpontok
+
+      
+      reply.send(timetableInfo);
+    } catch (error) {
+      reply.send(error);
+    }
   };
 
+  const getSubjectByDay = async (request, reply) => {
+    const { timetable_day } = request.params;
+    try {
+      const timetableInfo2 = await knex('timetable')
+        .select('subject.subject_name')
+        .leftJoin('subject', 'timetable.subject_id', 'subject.subject_id')
+        .where('timetable.timetable_day',timetable_day);  
+
+      
+      reply.send(timetableInfo2);
+    } catch (error) {
+      reply.send(error);
+    }
+  };
+  
+  
   module.exports = {
     getTimes,
     getTimesById,
     getTimesBySubjectId,
-    //getTimesByBool,
     addNewTime,
     deleteTimeById,
     deleteTimeBySubjectId,
-    //deleteTimeByBool,
     deleteTimeByDay,
     updateTimeById,
-    checkAuth,
+    getFreeTimes,
+    getSubjectByDay,
   };
+  
