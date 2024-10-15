@@ -7,6 +7,8 @@ const {
     deleteTimeBySubjectId,
     deleteTimeByDay,
     updateTimeById,
+    getTimetableBooked,
+    getTimetableByLevel,
     getFreeTimes,
     getSubjectByDay,
     //checkAuth,
@@ -133,6 +135,33 @@ const {
     },
     handler: updateTimeById,
   };
+
+  const getTimetableBooked1 = { // get booked times
+    schema: {
+      description: "Get booked times",
+      response: {
+        200: {
+          type: "object",
+          properties: { message: { type: "string" } },
+        },
+      },
+    },
+    handler: getTimetableBooked,
+  };
+
+  const getTimetableByLevel1 = { // get times by level of subject
+    schema: {
+      description: "Get booked times",
+      response: {
+        200: {
+          type: "object",
+          properties: { message: { type: "string" } },
+        },
+      },
+    },
+    handler: getTimetableByLevel,
+  };
+
   const getFreeTimes2 = { // get free times
     schema: {
       description: "Get free times",
@@ -168,6 +197,8 @@ const {
     fastify.delete("/timetable2/:subject_id", deleteTimeOptsTwo);
     fastify.delete("/timetable3/:timetable_day", deleteTimeOptsThree);
     fastify.put("/timetable/:timetable_id", updateTimeOpts);
+    fastify.get('/timetabls/booked', getTimetableBooked);
+    fastify.get('/timetable4/:subject_level', getTimetableByLevel);
     fastify.get('/timetables/free-times', getFreeTimes),
     fastify.get('/timetables/:timetable_day', getSubjectByDay);
     

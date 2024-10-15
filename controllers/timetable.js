@@ -43,34 +43,30 @@ const getTimesById = async (req, reply) => {  //get times by id
     }
   }; */
 
-  const addNewTime = async (req, reply) => {  //add new time
-    const { subject_id } = req.body;
-    const { timetable_day } = req.params;
-    const { timetable_bool } = req.body;
-    const { start_time } = req.body;
-    const { end_time } = req.body;
-    
+  const addNewTime = async (req, reply) => { // add new time
+    const { subject_id, timetable_bool, start_time, end_time, timetable_day } = req.body;
+  
     try {
-      await knex("timetable").insert({      
-        subject_id: subject_id,
-        timetable_day: timetable_day,
-        timetable_bool: timetable_bool,
-        start_time: start_time,
-        end_time: end_time,
-        created_at: knex.fn.now(),    
+      await knex("timetable").insert({
+        subject_id:subject_id,
+        timetable_day:timetable_day,
+        timetable_bool:timetable_bool,
+        start_time:start_time,
+        end_time:end_time,
+        created_at: knex.fn.now(),
       });
   
       reply.code(200).send({ message: `Time has been added` });
     } catch (error) {
-      if(error.message.includes("duplicate key value violates unique constraint")){
-        console.log("DUPLICATE")
+      if (error.message.includes("duplicate key value violates unique constraint")) {
+        console.log("DUPLICATE");
         reply.code(409).send({ message: `Time already exists` });
       }
-      console.log(error)
+      console.log(error);
     }
   };
 
-  const deleteTimeById = async (req, reply) => {  //delete time by id
+   const deleteTimeById = async (req, reply) => {  //delete time by id
     const { timetable_id } = req.params;
     try {
       await knex("timetable").where({ timetable_id: timetable_id }).del();
@@ -125,6 +121,8 @@ const getTimesById = async (req, reply) => {  //get times by id
           .where({ timetable_id: timetable_id })
           .update({
             //timetable_id: timetable[0].timetable_id,
+            subject_id:subject_id,
+            timetable_day:timetable_day,
             timetable_bool: timetable_bool,
             start_time: start_time,
             end_time: end_time,
@@ -134,6 +132,45 @@ const getTimesById = async (req, reply) => {  //get times by id
         reply.send(error);
       }
   };
+
+
+  const getTimetableBooked = async (request, reply) => {
+    const { timetable_id } = request.params;
+    try {
+      const timetableInfo = await knex('timetable')
+        .select('subject.subject_name', 'timetable.timetable_day', 'timetable.start_time', 'timetable.end_time','user.username','timetable_log.timetable_id')
+        .leftJoin('subject', 'timetable.subject_id', 'subject.subject_id')
+        .leftJoin('user_subject','user_subject.subject_id','subject.subject_id')
+        .leftJoin('user','user.user_id','user_subject.user_id')
+        .leftJoin('timetable_log','timetable_log.timetable_id','timetable.timetable_id')
+        .where('timetable.timetable_bool', true);
+
+      
+      reply.send(timetableInfo);
+    } catch (error) {
+      reply.send(error);
+    }
+  };
+
+      const getTimetableByLevel = async (request, reply) => {
+        const { subject_level } = request.params;    
+        const timetableInform = await knex('subject')
+      .select(
+        'subject.subject_id',
+        'subject.subject_name',
+        'timetable.timetable_id',
+        'timetable.timetable_day',
+        'timetable.start_time',
+        'timetable.end_time',
+        'subject.subject_level'
+      )
+      .join('timetable', 'subject.subject_id', 'timetable.subject_id')
+      .where('subject.subject_level', subject_level);
+
+        reply.send(timetableInform);
+    };
+
+
 
   const getFreeTimes = async (request, reply) => {
     const { timetable_id } = request.params;
@@ -164,6 +201,10 @@ const getTimesById = async (req, reply) => {  //get times by id
       reply.send(error);
     }
   };
+
+
+
+  
   
   
   module.exports = {
@@ -175,6 +216,8 @@ const getTimesById = async (req, reply) => {  //get times by id
     deleteTimeBySubjectId,
     deleteTimeByDay,
     updateTimeById,
+    getTimetableBooked,
+    getTimetableByLevel,
     getFreeTimes,
     getSubjectByDay,
   };
