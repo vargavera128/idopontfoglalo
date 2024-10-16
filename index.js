@@ -19,6 +19,31 @@ fastify.decorate("authenticate", async function (request, reply) {
   }
 });
 
+fastify.register(require('@fastify/multipart'));  //register multipart form-data parsing plugin
+
+fastify.register(require("@fastify/swagger"));  //register Swagger documentation plugin
+
+fastify.register(require("@fastify/swagger-ui"), {  //register Swagger UI plugin for visualizing API documentation
+  routePrefix: "/documentation",
+  uiConfig: {
+    docExpansion: "full",
+    deepLinking: false,
+  },
+  uiHooks: {
+    onRequest: function (request, reply, next) {
+      next();
+    },
+    preHandler: function (request, reply, next) {
+      next();
+    },
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+  transformSpecification: (swaggerObject, request, reply) => {
+    return swaggerObject;
+  },
+  transformSpecificationClone: true,
+});
 
 module.exports = { fastify, knex };
 
@@ -31,8 +56,6 @@ const permission = require("./routes/permission.js");
 const user_log = require("./routes/user_log.js");
 const timetable_log = require("./routes/timetable_log.js");
 const subject_log = require("./routes/subject_log.js");
-const user_subject_log = require("./routes/user_subject_log.js");
-const user_subject = require("./routes/user_subject.js");
 const user_role = require("./routes/user_role.js");
 const role_permission = require("./routes/role_permission.js");
 const booking = require("./routes/booking.js");
@@ -68,8 +91,6 @@ const start = async () => {
   fastify.register(user_log);
   fastify.register(timetable_log);
   fastify.register(subject_log);
-  fastify.register(user_subject_log);
-  fastify.register(user_subject);
   fastify.register(user_role);
   fastify.register(role_permission);
   fastify.register(booking);

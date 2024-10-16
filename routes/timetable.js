@@ -224,18 +224,11 @@ const {
     fastify.delete("/timetable2/:subject_id", deleteTimeOptsTwo);  //törli az összes pl 3-as id-jó tárgyhoz hoz tartozó órát
     fastify.delete("/timetable3/:timetable_day", deleteTimeOptsThree);  //törli az összes tárgyat az adott napon
     fastify.put("/timetable/:timetable_id", updateTimeOpts);
-<<<<<<< HEAD
-    fastify.get('/timetabls/booked', getTimetableBooked);
-    fastify.get('/timetable4/:subject_level', getTimetableByLevel);
-    fastify.get('/timetable5/:subject_name', getTimetableBySubject1);
-    fastify.get('/timetables/free-times', getFreeTimes),
-    fastify.get('/timetables/:timetable_day', getSubjectByDay);
-=======
     fastify.get('/timetable/booked', getTimetableBooked1);
     fastify.get('/timetable4/:subject_level', getTimetableByLevel1);
     fastify.get('/timetables/free-times', getFreeTimes2),
     fastify.get('/timetables/:timetable_day', getSubjectByDay2);  //időpont, level is kell!!!
->>>>>>> 51324b45efd1718d94fbcdfb657469e88c1d8d86
+    fastify.get('/timetable5/:subject_name', getTimetableBySubject1);
     
     done();
   }

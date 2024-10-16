@@ -50,7 +50,7 @@ const addNewTime = async (req, reply) => { // add new time
       end_time,
       created_at: knex.fn.now(),
     });
-
+ 
     await trx.commit();
     reply.code(200).send({ message: `Time has been added` });
   } catch (error) {
@@ -258,4 +258,5 @@ module.exports = {
   getTimetableByLevel,
   getFreeTimes,
   getSubjectByDay,
+  getTimetableBySubject
 };
