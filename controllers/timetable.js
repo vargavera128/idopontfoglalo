@@ -170,6 +170,24 @@ const getTimesById = async (req, reply) => {  //get times by id
         reply.send(timetableInform);
     };
 
+    const getTimetableBySubject = async (request, reply) => {
+      const { subject_name } = request.params;    
+      const timetableInform = await knex('subject')
+    .select(
+      'subject.subject_id',
+      'subject.subject_name',
+      'timetable.timetable_id',
+      'timetable.timetable_day',
+      'timetable.start_time',
+      'timetable.end_time',
+      'subject.subject_level'
+    )
+    .join('timetable', 'subject.subject_id', 'timetable.subject_id')
+    .where('subject.subject_name', subject_name);
+
+      reply.send(timetableInform);
+  };
+
 
 
   const getFreeTimes = async (request, reply) => {
@@ -218,6 +236,7 @@ const getTimesById = async (req, reply) => {  //get times by id
     updateTimeById,
     getTimetableBooked,
     getTimetableByLevel,
+    getTimetableBySubject,
     getFreeTimes,
     getSubjectByDay,
   };

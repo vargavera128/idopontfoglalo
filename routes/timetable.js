@@ -9,6 +9,7 @@ const {
     updateTimeById,
     getTimetableBooked,
     getTimetableByLevel,
+    getTimetableBySubject,
     getFreeTimes,
     getSubjectByDay,
     //checkAuth,
@@ -162,6 +163,19 @@ const {
     handler: getTimetableByLevel,
   };
 
+  const getTimetableBySubject1 = { // get times by level of subject
+    schema: {
+      description: "Get times by subject",
+      response: {
+        200: {
+          type: "array",
+          properties: { message: { type: "string" } },
+        },
+      },
+    },
+    handler: getTimetableBySubject,
+  };
+
   const getFreeTimes2 = { // get free times
     schema: {
       description: "Get free times",
@@ -199,6 +213,7 @@ const {
     fastify.put("/timetable/:timetable_id", updateTimeOpts);
     fastify.get('/timetabls/booked', getTimetableBooked);
     fastify.get('/timetable4/:subject_level', getTimetableByLevel);
+    fastify.get('/timetable5/:subject_name', getTimetableBySubject1);
     fastify.get('/timetables/free-times', getFreeTimes),
     fastify.get('/timetables/:timetable_day', getSubjectByDay);
     
