@@ -83,9 +83,6 @@ const getRolesById = async (req, reply) => {  //get roles by id
       }
   };
 
-  const checkAuth = async (request, reply) => {  //checkAuth
-    reply.send(request.role);
-  };
 
   module.exports = {
     getRole,
@@ -94,5 +91,4 @@ const getRolesById = async (req, reply) => {  //get roles by id
     addNewRole,
     deleteRoleById,
     updateRoleById,
-    checkAuth,
   };
