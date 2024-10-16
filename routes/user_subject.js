@@ -5,6 +5,7 @@ const {
     deleteUserSubjectById,
     addUserSubject,
   } = require("../controllers/user_subject.js");
+  const {fastify} = require("../index.js");
   
   const UserSubject = {  //Struct for UserSubject
     type: "object",
@@ -27,6 +28,7 @@ const {
       },
     },
     handler: getUserSubjects,
+    onRequest: [fastify.authenticate]
   };
   
   const getUserSubjectOpts = {  //Option for get user_subject by id
@@ -40,6 +42,7 @@ const {
       },
     },
     handler: getUserSubjectById,
+    onRequest: [fastify.authenticate]
   };
   
   const updateUserSubjectOpts = {  //Option for update user_subject by id
@@ -55,6 +58,7 @@ const {
       },
     },
     handler: updateUserSubjectById,
+    onRequest: [fastify.authenticate]
   };
   
   const postUserSubjectOpts = {  //Option for add new user_subject entry
@@ -70,6 +74,7 @@ const {
       },
     },
     handler: addUserSubject,
+    onRequest: [fastify.authenticate]
   };
   
   const deleteUserSubjectOpts = {  //Option for delete user_subject by id
@@ -85,6 +90,7 @@ const {
       },
     },
     handler: deleteUserSubjectById,
+    onRequest: [fastify.authenticate]
   };
   
   function userSubjectRoutes(fastify, options, done) {

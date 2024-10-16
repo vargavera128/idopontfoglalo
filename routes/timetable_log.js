@@ -3,7 +3,6 @@ const {
     getTimetableLog,
     getTimetableLogById,
     getTimetableLogByTimetableId,
-   
   } = require("../controllers/timetable_log.js");
   const { fastify } = require("../index.js");
   
@@ -33,7 +32,7 @@ const {
         },
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getTimetableLog,
   };
   
@@ -44,7 +43,7 @@ const {
         200: Item,
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getTimetableLogById,
   };
 
@@ -55,7 +54,7 @@ const {
         200: Item,
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getTimetableLogByTimetableId,
   };
   

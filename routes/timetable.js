@@ -11,12 +11,13 @@ const {
     getTimetableByLevel,
     getFreeTimes,
     getSubjectByDay,
-    //checkAuth,
   } = require("../controllers/timetable.js");
+  const {fastify} = require("../index.js");
   
   const Time = {   // Struct for Timetable
     type: "object",
     properties: {
+      timetable_id:{ type: "integer" },
       subject_id: { type: "integer" },
       timetable_day: { type: "string" },
       timetable_bool: { type: "boolean" },
@@ -34,6 +35,7 @@ const {
       },
     },
     handler: getTimes,
+    onRequest: [fastify.authenticate]
   };
   
   const getTimeOpts2 = { // Options for get one time
@@ -44,16 +46,18 @@ const {
       },
     },
     handler: getTimesById,
+    onRequest: [fastify.authenticate]
   };
 
   const getTimeOpts = { // Options for get one time
     schema: {
       description: "Get time by id of the subject",
       response: {
-        200: Time,
+        200: { type: "array", items: Time },
       },
     },
     handler: getTimesBySubjectId,
+    onRequest: [fastify.authenticate]
   };
   
   const postTimeOpts = { //Options for add time
@@ -82,6 +86,7 @@ const {
       },
     },
     handler: addNewTime,
+    onRequest: [fastify.authenticate]
   };
   
   const deleteTimeOpts = { //Options for Delete time
@@ -95,6 +100,7 @@ const {
       },
     },
     handler: deleteTimeById,
+    onRequest: [fastify.authenticate]
   };
 
   const deleteTimeOptsTwo = { //Options for Delete time
@@ -108,6 +114,7 @@ const {
       },
     },
     handler: deleteTimeBySubjectId,
+    onRequest: [fastify.authenticate]
   };
 
   const deleteTimeOptsThree = { //Options for Delete time
@@ -121,6 +128,7 @@ const {
       },
     },
     handler: deleteTimeByDay,
+    onRequest: [fastify.authenticate]
   };
   
   const updateTimeOpts = { // Update one Time
@@ -134,6 +142,7 @@ const {
       },
     },
     handler: updateTimeById,
+    onRequest: [fastify.authenticate]
   };
 
   const getTimetableBooked1 = { // get booked times
@@ -141,12 +150,13 @@ const {
       description: "Get booked times",
       response: {
         200: {
-          type: "object",
+          type: "array",
           properties: { message: { type: "string" } },
         },
       },
     },
     handler: getTimetableBooked,
+    onRequest: [fastify.authenticate]
   };
 
   const getTimetableByLevel1 = { // get times by level of subject
@@ -154,12 +164,13 @@ const {
       description: "Get booked times",
       response: {
         200: {
-          type: "object",
+          type: "array",
           properties: { message: { type: "string" } },
         },
       },
     },
     handler: getTimetableByLevel,
+    onRequest: [fastify.authenticate]
   };
 
   const getFreeTimes2 = { // get free times
@@ -167,12 +178,13 @@ const {
       description: "Get free times",
       response: {
         200: {
-          type: "object",
+          type: "array",
           properties: { message: { type: "string" } },
         },
       },
     },
     handler: getFreeTimes,
+    onRequest: [fastify.authenticate]
   };
 
   const getSubjectByDay2 = { // get subject by day
@@ -180,12 +192,13 @@ const {
       description: "Get subject by day",
       response: {
         200: {
-          type: "object",
+          type: "array",
           properties: { message: { type: "string" } },
         },
       },
     },
     handler: getSubjectByDay,
+    onRequest: [fastify.authenticate]
   };
   
   function TimeRoutes(fastify, options, done) {
@@ -194,13 +207,13 @@ const {
     fastify.get("/timetable1/:subject_id", getTimeOpts);
     fastify.post("/timetable", postTimeOpts);
     fastify.delete("/timetable/:timetable_id", deleteTimeOpts);
-    fastify.delete("/timetable2/:subject_id", deleteTimeOptsTwo);
-    fastify.delete("/timetable3/:timetable_day", deleteTimeOptsThree);
+    fastify.delete("/timetable2/:subject_id", deleteTimeOptsTwo);  //törli az összes pl 3-as id-jó tárgyhoz hoz tartozó órát
+    fastify.delete("/timetable3/:timetable_day", deleteTimeOptsThree);  //törli az összes tárgyat az adott napon
     fastify.put("/timetable/:timetable_id", updateTimeOpts);
-    fastify.get('/timetabls/booked', getTimetableBooked);
-    fastify.get('/timetable4/:subject_level', getTimetableByLevel);
-    fastify.get('/timetables/free-times', getFreeTimes),
-    fastify.get('/timetables/:timetable_day', getSubjectByDay);
+    fastify.get('/timetable/booked', getTimetableBooked1);
+    fastify.get('/timetable4/:subject_level', getTimetableByLevel1);
+    fastify.get('/timetables/free-times', getFreeTimes2),
+    fastify.get('/timetables/:timetable_day', getSubjectByDay2);  //időpont, level is kell!!!
     
     done();
   }
