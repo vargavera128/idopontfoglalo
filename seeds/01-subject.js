@@ -3,6 +3,14 @@
  * @returns { Promise<void> }
  */
 exports.seed = async function (knex) {
+
+  await knex.raw(`ALTER TABLE "user" DISABLE TRIGGER user_changes_trigger`);  //disable triggers
+  await knex.raw(`ALTER TABLE "subject" DISABLE TRIGGER subject_changes_trigger`);
+  await knex.raw(`ALTER TABLE "timetable" DISABLE TRIGGER timetable_changes_trigger`);
+  //await knex.raw(`ALTER TABLE "user_subject" DISABLE TRIGGER user_subject_changes_trigger`);
+
+
+  
   await knex("user").del();  
   await knex("subject").insert([  //create subjects
     {
@@ -114,4 +122,6 @@ exports.seed = async function (knex) {
       created_at: new Date(),
     },
   ]);
+
+  
 };

@@ -62,4 +62,11 @@ await knex("role_permission").insert([  // Role: User (role_id: 3) - View-only a
   { role_id: 3, permission_id: 11, created_at: new Date() }, // get subject data
   { role_id: 3, permission_id: 14, created_at: new Date() }, // get time data
 ]);
+
+
+await knex.raw(`ALTER TABLE "user" ENABLE TRIGGER user_changes_trigger`);  //enable triggers
+await knex.raw(`ALTER TABLE "subject" ENABLE TRIGGER subject_changes_trigger`);
+await knex.raw(`ALTER TABLE "timetable" ENABLE TRIGGER timetable_changes_trigger`);
+//await knex.raw(`ALTER TABLE "user_subject" ENABLE TRIGGER user_subject_changes_trigger`);
+
 }
