@@ -35,23 +35,8 @@ const user_subject_log = require("./routes/user_subject_log.js");
 const user_subject = require("./routes/user_subject.js");
 const user_role = require("./routes/user_role.js");
 const role_permission = require("./routes/role_permission.js");
+const booking = require("./routes/booking.js");
 
-/*
-const user_change_log = require("./routes/user_change_log.js");
-const organization = require("./routes/organization.js");
-const organization_change_log = require("./routes/organization_change_log.js");
-const department = require("./routes/department.js");
-const department_change_log = require("./routes/department_change_log.js");
-const job = require("./routes/job.js");
-const job_change_log = require("./routes/job_change_log.js");
-const role = require("./routes/role.js");
-const role_user = require("./routes/role_user.js");
-const publication = require("./routes/publication.js");
-const ip = require("./routes/ip.js");
-const publication_change_log = require("./routes/publication_change_log.js");
-const ip_change_log = require("./routes/ip_change_log.js");
-const monthly_report = require("./routes/monthly_report.js");
-*/
 
 const start = async () => {
   for (;;) {
@@ -87,19 +72,7 @@ const start = async () => {
   fastify.register(user_subject);
   fastify.register(user_role);
   fastify.register(role_permission);
-  
-
-  /*
-  dgfWKGZIARUGITPOJOIRHGWPURGA
-    dgfWKGZIARUGITPOJOIRHGWPURGA
-      dgfWKGZIARUGITPOJOIRHGWPURGA
-        dgfWKGZIARUGITPOJOIRHGWPURGA
-          dgfWKGZIARUGITPOJOIRHGWPURGA
-            dgfWKGZIARUGITPOJOIRHGWPURGA
-              dgfWKGZIARUGITPOJOIRHGWPURGA
-                dgfWKGZIARUGITPOJOIRHGWPURGA
-  */
-
+  fastify.register(booking);
 
   fastify.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
     if (err) {
