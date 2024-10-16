@@ -8,7 +8,7 @@ exports.seed = async function (knex) {
     {
       username: "admin",
       name: "admin",
-      password: "3f881e02e136c97fcf0d11ee252abbe05179bceefcdab5b3e5cd0b0103d1f26e390c460038d86ed70627027eb43d23728e872a10176709e28225f2b7b0acae5b",  //admin
+      password: "074aa490729dd8008282479f36ce4620b17d90ffb57088e6de32c891bc3bab0783e1932353cc00c84e10b9a516ccd801dec2156dbff4d68a36911d59318a661a",  //admin
       email: "admin@email.com",
       created_at: new Date(),
     },

@@ -28,7 +28,7 @@ const {
       },
     },
     handler: getPermission,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const getItemOpts = {  // Options for get one item by id
@@ -39,7 +39,7 @@ const {
       },
     },
     handler: getPermissionById,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
 
   
@@ -70,7 +70,7 @@ const {
       },
     },
     handler: addPermission,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   const updateItemOpts = {  //Update one Item
     schema: {
@@ -85,7 +85,7 @@ const {
       },
     },
     handler: updatePermissionById,
-    //onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   const deleteItemOpts = {  // Options for deleting an item
     schema: {
@@ -100,7 +100,7 @@ const {
       },
     },
     handler: deletePermissionById,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   function UserRoutes(fastify, options, done) {

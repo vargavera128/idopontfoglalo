@@ -5,8 +5,8 @@ const {
     addNewRole,
     deleteRoleById,
     updateRoleById,
-    //checkAuth,
   } = require("../controllers/role.js");
+  const {fastify} = require("../index.js");
   
   const Role = {   // Struct for Role
     type: "object",
@@ -25,6 +25,7 @@ const {
       },
     },
     handler: getRole,
+    onRequest: [fastify.authenticate]
   };
   
   const getRoleOpts2 = { // Options for get one role
@@ -35,6 +36,7 @@ const {
       },
     },
     handler: getRolesById,
+    onRequest: [fastify.authenticate]
   };
 
   const getRoleOpts = { // Options for get one role
@@ -45,6 +47,7 @@ const {
       },
     },
     handler: getRolesByName,
+    onRequest: [fastify.authenticate]
   };
   
   const postRoleOpts = { //Options for add role
@@ -71,6 +74,7 @@ const {
       },
     },
     handler: addNewRole,
+    onRequest: [fastify.authenticate]
   };
   
   const deleteRoleOpts = { //Options for Delete role
@@ -84,6 +88,7 @@ const {
       },
     },
     handler: deleteRoleById,
+    onRequest: [fastify.authenticate]
   };
   
   const updateRoleOpts = { // Update one Role
@@ -97,6 +102,7 @@ const {
       },
     },
     handler: updateRoleById,
+    onRequest: [fastify.authenticate]
   };
   
   function RoleRoutes(fastify, options, done) {

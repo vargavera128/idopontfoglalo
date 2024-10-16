@@ -36,7 +36,7 @@ const {
       },
     },
     handler: getUsers,
-    //onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const getItemOpts = {  // Options for get one item
@@ -47,7 +47,7 @@ const {
       },
     },
     handler: getUserById,
-    //onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const postItemOpts = {  //Options for add item
@@ -79,7 +79,7 @@ const {
       },
     },
     handler: addUser,
-    //onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const deleteItemOpts = {  //Options for Delete item
@@ -95,7 +95,7 @@ const {
       },
     },
     handler: deleteUserById,
-    //onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const updateItemOpts = {  //Update one Item
@@ -111,7 +111,7 @@ const {
       },
     },
     handler: updateUserById,
-    //onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
 
 
@@ -171,13 +171,13 @@ const {
         200: Item,
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getUserByEmail,
-    //onRequest: [fastify.authenticate],
+    
   };
   
   const checkAuthOpts = {
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: checkAuth,
   };
   

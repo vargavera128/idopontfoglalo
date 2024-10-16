@@ -5,6 +5,7 @@ const {
     deleteRolePermissionById,
     addRolePermission,
   } = require("../controllers/role_permission.js");
+  const {fastify} = require("../index.js");
   
   const RolePermission = {  //Struct for RolePermission
     type: "object",
@@ -27,6 +28,7 @@ const {
       },
     },
     handler: getRolePermissions,
+    onRequest: [fastify.authenticate]
   };
   
   const getRolePermissionOpts = {  //Option for get role_permission by id
@@ -40,6 +42,7 @@ const {
       },
     },
     handler: getRolePermissionById,
+    onRequest: [fastify.authenticate]
   };
   
   const updateRolePermissionOpts = {  //Option for update role_permission by id
@@ -55,6 +58,7 @@ const {
       },
     },
     handler: updateRolePermissionById,
+    onRequest: [fastify.authenticate]
   };
   
   const postRolePermissionOpts = {  //Option for add new role_permission entry
@@ -70,6 +74,7 @@ const {
       },
     },
     handler: addRolePermission,
+    onRequest: [fastify.authenticate]
   };
   
   const deleteRolePermissionOpts = {  //Option for delete role_permission by id
@@ -85,6 +90,7 @@ const {
       },
     },
     handler: deleteRolePermissionById,
+    onRequest: [fastify.authenticate]
   };
   
   function rolePermissionRoutes(fastify, options, done) {

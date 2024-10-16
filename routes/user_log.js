@@ -3,7 +3,6 @@ const {
     getUserLog,
     getUserLogById,
     getUserLogByUserId
-   
   } = require("../controllers/user_log.js");
   const { fastify } = require("../index.js");
   
@@ -32,7 +31,7 @@ const {
         },
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getUserLog,
   };
   
@@ -43,7 +42,7 @@ const {
         200: Item,
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getUserLogById,
   };
 
@@ -54,7 +53,7 @@ const {
         200: Item,
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getUserLogByUserId,
   };
   

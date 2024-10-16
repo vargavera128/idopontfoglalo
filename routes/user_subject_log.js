@@ -29,7 +29,7 @@ const {
         },
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getUserSubjectLog,
   };
   
@@ -40,7 +40,7 @@ const {
         200: Item,
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getUserSubjectLogById,
   };
 
@@ -51,7 +51,7 @@ const {
         200: Item,
       },
     },
-    //onRequest: [fastify.authenticate],
+    onRequest: [fastify.authenticate],
     handler: getUserSubjectLogByUserId,
   };
   

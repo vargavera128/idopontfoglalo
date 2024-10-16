@@ -33,7 +33,7 @@ const {
       },
     },
     handler: getSubject,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const getItemOpts = {  // Options for get one item by id
@@ -44,18 +44,21 @@ const {
       },
     },
     handler: getSubjectById,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const getItemOpts2 = {  // Options for get one item by level
     schema: {
       description: "Get subject by level",
       response: {
-        200: Item,
+        200: {
+          type: "array",
+          items: Item,
+        },
       },
     },
     handler: getSubjectLevel,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   const postItemOpts = {  // Options for adding a new item
@@ -89,7 +92,7 @@ const {
       },
     },
     handler: addSubject,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   const updateItemOpts = {  //Update one Item
     schema: {
@@ -104,7 +107,7 @@ const {
       },
     },
     handler: updateSubjectById,
-    //onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   const deleteItemOpts = {  // Options for deleting an item
     schema: {
@@ -119,7 +122,7 @@ const {
       },
     },
     handler: deleteSubjectById,
-    // onRequest: [fastify.authenticate]
+    onRequest: [fastify.authenticate]
   };
   
   function UserRoutes(fastify, options, done) {

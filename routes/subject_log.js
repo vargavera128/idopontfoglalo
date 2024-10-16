@@ -3,7 +3,6 @@ const {
     getSubjectLog,
     getSubjectLogById,
     getSubjectLogBySubjectId
-   
   } = require("../controllers/subject_log.js");
   const { fastify } = require("../index.js");
   
@@ -36,6 +35,7 @@ const {
     },
     //onRequest: [fastify.authenticate],
     handler: getSubjectLog,
+    onRequest: [fastify.authenticate]
   };
   
   const getItemOpts = {  // Options for get  user log by user log id
@@ -47,6 +47,7 @@ const {
     },
     //onRequest: [fastify.authenticate],
     handler: getSubjectLogById,
+    onRequest: [fastify.authenticate]
   };
 
   const getItemOptsUserid = {  // Options for get user log by user id
@@ -58,6 +59,7 @@ const {
     },
     //onRequest: [fastify.authenticate],
     handler: getSubjectLogBySubjectId,
+    onRequest: [fastify.authenticate]
   };
   
   

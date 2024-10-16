@@ -1,6 +1,4 @@
 const { knex } = require("../index.js");
-//const { pbkdf2 } = require("crypto");
-//const  {fastify}  = require("../index.js");
 
 const getTimes = async (req, reply) => {  //get all times
   try {
@@ -12,149 +10,174 @@ const getTimes = async (req, reply) => {  //get all times
 };
 
 const getTimesById = async (req, reply) => {  //get times by id
-    const { timetable_id } = req.params;
-    try {
-      const timetable = await knex("timetable").select("*").where({ timetable_id: timetable_id });
-      reply.send(timetable[0]);
-    } catch (error) {
+  const { timetable_id } = req.params;
+  try {
+    const timetable = await knex("timetable").select("*").where({ timetable_id });
+    reply.send(timetable[0]);
+  } catch (error) {
+    reply.send(error);
+  }
+};
+
+const getTimesBySubjectId = async (req, reply) => {  //get times by the id of subject
+  const { subject_id } = req.params;
+  try {
+    const timetable = await knex("timetable").select("*").where({ subject_id });
+    reply.send(timetable);
+  } catch (error) {
+    reply.send(error);
+  }
+};
+
+
+const addNewTime = async (req, reply) => { // add new time
+  const { subject_id, timetable_bool, start_time, end_time, timetable_day } = req.body;
+  const currentUser = req.user?.user_id;
+
+  if (!currentUser) {
+    return reply.status(401).send({ message: 'User not authenticated.' });
+  }
+
+  const trx = await knex.transaction();
+  try {
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+
+    await trx("timetable").insert({
+      subject_id,
+      timetable_day,
+      timetable_bool,
+      start_time,
+      end_time,
+      created_at: knex.fn.now(),
+    });
+
+    await trx.commit();
+    reply.code(200).send({ message: `Time has been added` });
+  } catch (error) {
+    await trx.rollback();
+    if (error.message.includes("duplicate key value violates unique constraint")) {
+      reply.code(409).send({ message: `Time already exists` });
+    } else {
       reply.send(error);
     }
-  };
+  }
+};
 
-  const getTimesBySubjectId = async (req, reply) => {  //get times by the id of subject
-    const { subject_id } = req.params;
-    try {
-      const timetable = await knex("timetable").select("*").where({ subject_id: subject_id });
-      reply.send(timetable[0]);
-    } catch (error) {
-      reply.send(error);
+const deleteTimeById = async (req, reply) => {  //delete time by id
+  const { timetable_id } = req.params;
+  const currentUser = req.user?.user_id;
+
+  if (!currentUser) {
+    return reply.status(401).send({ message: 'User not authenticated.' });
+  }
+
+  const trx = await knex.transaction();
+  try {
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    await trx("timetable").where({ timetable_id }).del();
+    await trx.commit();
+    reply.send({ message: `Time ${timetable_id} has been removed` });
+  } catch (error) {
+    await trx.rollback();
+    reply.send(error);
+  }
+};
+
+const deleteTimeBySubjectId = async (req, reply) => {  //delete time by subject_id
+  const { subject_id } = req.params;
+  const currentUser = req.user?.user_id;
+
+  if (!currentUser) {
+    return reply.status(401).send({ message: 'User not authenticated.' });
+  }
+
+  const trx = await knex.transaction();
+  try {
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    await trx("timetable").where({ subject_id }).del();
+    await trx.commit();
+    reply.send({ message: `Time for subject ${subject_id} has been removed` });
+  } catch (error) {
+    await trx.rollback();
+    reply.send(error);
+  }
+};
+
+
+const deleteTimeByDay = async (req, reply) => {  //delete time by day
+  const { timetable_day } = req.params;
+  const currentUser = req.user?.user_id;
+
+  if (!currentUser) {
+    return reply.status(401).send({ message: 'User not authenticated.' });
+  }
+
+  const trx = await knex.transaction();
+  try {
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    await trx("timetable").where({ timetable_day }).del();
+    await trx.commit();
+    reply.send({ message: `Time for day ${timetable_day} has been removed` });
+  } catch (error) {
+    await trx.rollback();
+    reply.send(error);
+  }
+};
+
+const updateTimeById = async (req, reply) => {  //update time by id
+  const { timetable_id } = req.params;
+  const { subject_id, timetable_day, timetable_bool, start_time, end_time } = req.body;
+  const currentUser = req.user?.user_id;
+
+  if (!currentUser) {
+    return reply.status(401).send({ message: 'User not authenticated.' });
+  }
+
+  const trx = await knex.transaction();
+  try {
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    const timetable = await trx("timetable").where({ timetable_id }).first();
+
+    if (!timetable) {
+      return reply.status(404).send({ message: 'Timetable not found' });
     }
-  };
 
-  
+    await trx("timetable").where({ timetable_id }).update({
+      subject_id,
+      timetable_day,
+      timetable_bool,
+      start_time,
+      end_time,
+    });
 
-  /* const getTimesByBool = async (req, reply) => {  //get times by bool
-    const { timetable_bool } = req.params;
-    try {
-      const timetable = await knex("timetable").select("*").where({ timetable_bool: timetable_bool });
-      reply.send(timetable[0]);
-    } catch (error) {
-      reply.send(error);
-    }
-  }; */
+    await trx.commit();
+    reply.code(200).send({ message: `Time ${timetable_id} has been updated` });
+  } catch (error) {
+    await trx.rollback();
+    reply.send(error);
+  }
+};
 
-  const addNewTime = async (req, reply) => { // add new time
-    const { subject_id, timetable_bool, start_time, end_time, timetable_day } = req.body;
-  
-    try {
-      await knex("timetable").insert({
-        subject_id:subject_id,
-        timetable_day:timetable_day,
-        timetable_bool:timetable_bool,
-        start_time:start_time,
-        end_time:end_time,
-        created_at: knex.fn.now(),
-      });
-  
-      reply.code(200).send({ message: `Time has been added` });
-    } catch (error) {
-      if (error.message.includes("duplicate key value violates unique constraint")) {
-        console.log("DUPLICATE");
-        reply.code(409).send({ message: `Time already exists` });
-      }
-      console.log(error);
-    }
-  };
+const getTimetableBooked = async (request, reply) => {
+  try {
+    const timetableInfo = await knex('timetable')
+      .select('subject.subject_name', 'timetable.timetable_day', 'timetable.start_time', 'timetable.end_time', 'user.username', 'timetable_log.timetable_id')
+      .leftJoin('subject', 'timetable.subject_id', 'subject.subject_id')
+      .leftJoin('booking', 'booking.timetable_id', 'timetable.timetable_id')
+      .leftJoin('user', 'user.user_id', 'user_subject.user_id')
+      .leftJoin('timetable_log', 'timetable_log.timetable_id', 'timetable.timetable_id')
+      .where('timetable.timetable_bool', true);
 
-   const deleteTimeById = async (req, reply) => {  //delete time by id
-    const { timetable_id } = req.params;
-    try {
-      await knex("timetable").where({ timetable_id: timetable_id }).del();
-      reply.send({ message: `Time ${timetable_id} has been removed` });
-    } catch (error) {
-      reply.send(error);
-    }
-  };
+    reply.send(timetableInfo);
+  } catch (error) {
+    reply.send(error);
+  }
+};
 
-  const deleteTimeBySubjectId = async (req, reply) => {  //delete time by subject_id
-    const { subject_id } = req.params;
-    try {
-      await knex("timetable").where({ subject_id: subject_id }).del();
-      reply.send({ message: `Time ${subject_id} has been removed` });
-    } catch (error) {
-      reply.send(error);
-    }
-  };
-
-  /* const deleteTimeByBool = async (req, reply) => {  //delete time by bool
-    const { timetable_bool } = req.params;
-    try {
-      await knex("timetable").where({ timetable_bool: timetable_bool }).del();
-      reply.send({ message: `Time ${timetable_bool} has been removed` });
-    } catch (error) {
-      reply.send(error);
-    }
-  }; */
-
-  const deleteTimeByDay = async (req, reply) => {  //delete time by day
-    const { timetable_day } = req.params;
-    try {
-      await knex("timetable").where({ timetable_day: timetable_day }).del();
-      reply.send({ message: `Time ${timetable_day} has been removed` });
-    } catch (error) {
-      reply.send(error);
-    }
-  };
-
-  const updateTimeById = async (req, reply) => {  //update time by id
-    const { timetable_id } = req.params;
-    const { subject_id } = req.params;
-    const { timetable_day } = req.body;
-    const { timetable_bool } = req.body;
-    const { start_time } = req.body;
-    const { end_time } = req.body;
-    
-    const timetable = await knex("timetable").where({ timetable_id: timetable_id });
-    
-      try {
-        userUpdate = await knex("timetable")
-          .where({ timetable_id: timetable_id })
-          .update({
-            //timetable_id: timetable[0].timetable_id,
-            subject_id:subject_id,
-            timetable_day:timetable_day,
-            timetable_bool: timetable_bool,
-            start_time: start_time,
-            end_time: end_time,
-          });
-        reply.code(200).send({ message: `Successfull edit` });
-      } catch (error) {
-        reply.send(error);
-      }
-  };
-
-
-  const getTimetableBooked = async (request, reply) => {
-    const { timetable_id } = request.params;
-    try {
-      const timetableInfo = await knex('timetable')
-        .select('subject.subject_name', 'timetable.timetable_day', 'timetable.start_time', 'timetable.end_time','user.username','timetable_log.timetable_id')
-        .leftJoin('subject', 'timetable.subject_id', 'subject.subject_id')
-        .leftJoin('user_subject','user_subject.subject_id','subject.subject_id')
-        .leftJoin('user','user.user_id','user_subject.user_id')
-        .leftJoin('timetable_log','timetable_log.timetable_id','timetable.timetable_id')
-        .where('timetable.timetable_bool', true);
-
-      
-      reply.send(timetableInfo);
-    } catch (error) {
-      reply.send(error);
-    }
-  };
-
-      const getTimetableByLevel = async (request, reply) => {
-        const { subject_level } = request.params;    
-        const timetableInform = await knex('subject')
+const getTimetableByLevel = async (request, reply) => {
+  const { subject_level } = request.params;
+  try {
+    const timetableInform = await knex('subject')
       .select(
         'subject.subject_id',
         'subject.subject_name',
@@ -167,8 +190,11 @@ const getTimesById = async (req, reply) => {  //get times by id
       .join('timetable', 'subject.subject_id', 'timetable.subject_id')
       .where('subject.subject_level', subject_level);
 
-        reply.send(timetableInform);
-    };
+    reply.send(timetableInform);
+  } catch (error) {
+    reply.send(error);
+  }
+};
 
     const getTimetableBySubject = async (request, reply) => {
       const { subject_name } = request.params;    
@@ -205,39 +231,31 @@ const getTimesById = async (req, reply) => {  //get times by id
     }
   };
 
-  const getSubjectByDay = async (request, reply) => {
-    const { timetable_day } = request.params;
-    try {
-      const timetableInfo2 = await knex('timetable')
-        .select('subject.subject_name')
-        .leftJoin('subject', 'timetable.subject_id', 'subject.subject_id')
-        .where('timetable.timetable_day',timetable_day);  
+const getSubjectByDay = async (request, reply) => {
+  const { timetable_day } = request.params;
+  try {
+    const timetableInfo2 = await knex('timetable')
+      .select('subject.subject_name')
+      .leftJoin('subject', 'timetable.subject_id', 'subject.subject_id')
+      .where('timetable.timetable_day', timetable_day);
 
-      
-      reply.send(timetableInfo2);
-    } catch (error) {
-      reply.send(error);
-    }
-  };
+    reply.send(timetableInfo2);
+  } catch (error) {
+    reply.send(error);
+  }
+};
 
-
-
-  
-  
-  
-  module.exports = {
-    getTimes,
-    getTimesById,
-    getTimesBySubjectId,
-    addNewTime,
-    deleteTimeById,
-    deleteTimeBySubjectId,
-    deleteTimeByDay,
-    updateTimeById,
-    getTimetableBooked,
-    getTimetableByLevel,
-    getTimetableBySubject,
-    getFreeTimes,
-    getSubjectByDay,
-  };
-  
+module.exports = {
+  getTimes,
+  getTimesById,
+  getTimesBySubjectId,
+  addNewTime,
+  deleteTimeById,
+  deleteTimeBySubjectId,
+  deleteTimeByDay,
+  updateTimeById,
+  getTimetableBooked,
+  getTimetableByLevel,
+  getFreeTimes,
+  getSubjectByDay,
+};

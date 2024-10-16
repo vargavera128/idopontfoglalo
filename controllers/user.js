@@ -1,231 +1,274 @@
 const { knex } = require("../index.js");
 const { pbkdf2 } = require("crypto");
-const  {fastify}  = require("../index.js");
+const { fastify } = require("../index.js");
 
-const getUsers = async (req, reply) => {  //get all users
+
+const getUsers = async (req, reply) => {  // Get all users
   try {
-    const user = await knex("user").select("*");
-    reply.send(user);
+    const users = await knex("user").select("*");
+    reply.send(users);
   } catch (error) {
-    reply.send(error);
+    reply.status(500).send({ message: 'Error retrieving users', error: error.message });
   }
 };
 
-const getUserById = async (req, reply) => {  //get user by id
+const getUserById = async (req, reply) => {  // Get user by ID
   const { user_id } = req.params;
   try {
-    const user = await knex("user").select("*").where({ user_id: user_id });
-    reply.send(user[0]);
+    const user = await knex("user").select("*").where({ user_id }).first();
+    if (user) {
+      reply.send(user);
+    } else {
+      reply.status(404).send({ message: 'User not found' });
+    }
   } catch (error) {
-    reply.send(error);
+    reply.status(500).send({ message: 'Error retrieving user', error: error.message });
   }
 };
 
 
-const getUserByEmail = async (req, reply) => {  //get user by email
+const getUserByEmail = async (req, reply) => {  // Get user by email
   const { email } = req.params;
   try {
-    const user = await knex("user").select("*").where({ email: email });
-    reply.send(user[0]);
+    const user = await knex("user").select("*").where({ email }).first();
+    if (user) {
+      reply.send(user);
+    } else {
+      reply.status(404).send({ message: 'User not found' });
+    }
   } catch (error) {
-    reply.send(error);
+    reply.status(500).send({ message: 'Error retrieving user', error: error.message });
   }
 };
 
 
-const addUser = async (req, reply) => {  //add new user
-  const { name } = req.body;
-  const { email } = req.body;
-  const { password } = req.body;
-  const { username } = req.body;
-  let hash = await new Promise((resolve, reject) => {
-    pbkdf2(password, '', 100000, 64, "sha512", async (err, derivedKey) => {
-      if (err) throw err;
-      resolve(derivedKey.toString("hex"));
-    });
-  });
+const addUser = async (req, reply) => {  // Add new user
+  const { name, email, password, username } = req.body;
+
+  if (!name || !email || !password || !username) {
+    return reply.status(400).send({ message: 'All fields are required.' });
+  }
+
+  const currentUser = req.user?.user_id;
+  if (!currentUser) {
+    return reply.status(401).send({ message: 'User not authenticated.' });
+  }
+
   try {
-    await knex("user").insert({      
+    const hash = await new Promise((resolve, reject) => {
+      pbkdf2(password, '', 100000, 64, "sha512", (err, derivedKey) => {
+        if (err) return reject(err);
+        resolve(derivedKey.toString("hex"));
+      });
+    });
+
+    const trx = await knex.transaction();
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+
+    await trx("user").insert({
       email: email.toLowerCase(),
-      password: await hash,
-      username: username,
-      name: name,
-      created_at: knex.fn.now(),    
+      password: hash,
+      username,
+      name,
+      created_at: knex.fn.now(),
     });
 
-    reply.code(200).send({ message: `User ${username} has been added` });
+    await trx.commit();
+    reply.status(201).send({ message: `User ${username} has been added` });
   } catch (error) {
-    if(error.message.includes("duplicate key value violates unique constraint")){
-      console.log("DUPLICATE")
-      reply.code(409).send({ message: `User already exists` });
+    await trx.rollback();
+    console.error("Error inserting user:", error);
+    if (error.message.includes("duplicate key value violates unique constraint")) {
+      return reply.status(409).send({ message: 'User already exists' });
     }
-    console.log(error)
+    reply.status(500).send({ message: 'Error adding user', error: error.message });
   }
 };
 
-const deleteUserById = async (req, reply) => {  //delete user by id
+
+const deleteUserById = async (req, reply) => {  // Delete user by ID
   const { user_id } = req.params;
+  const currentUser = req.user.user_id;
+
+  const trx = await knex.transaction();
+  
   try {
-    await knex("user").where({ user_id: user_id }).del();
-    reply.send({ message: `Item ${user_id} has been removed` });
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    const deletedRows = await trx("user").where({ user_id }).del();
+
+    if (deletedRows) {
+      await trx.commit();
+      reply.send({ message: `User ${user_id} has been removed` });
+    } else {
+      reply.status(404).send({ message: 'User not found' });
+    }
   } catch (error) {
-    reply.send(error);
+    await trx.rollback();
+    reply.status(500).send({ message: 'Error deleting user', error: error.message });
   }
 };
 
 
-const deleteUserByEmail = async (req, reply) => {  //delete user by email
+const deleteUserByEmail = async (req, reply) => {  // Delete user by email
   const { email } = req.params;
+  const currentUser = req.user.user_id;
+
+  const trx = await knex.transaction();
+
   try {
-    await knex("users").where({ email: email }).del();
-    reply.send({ message: `User ${email} has been removed` });
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    const deletedRows = await trx("user").where({ email }).del();
+
+    if (deletedRows) {
+      await trx.commit();
+      reply.send({ message: `User ${email} has been removed` });
+    } else {
+      reply.status(404).send({ message: 'User not found' });
+    }
   } catch (error) {
-    reply.send(error);
+    await trx.rollback();
+    reply.status(500).send({ message: 'Error deleting user', error: error.message });
   }
 };
 
 
-const deleteUserByUsername = async (req, reply) => {  //delete user by username
+const deleteUserByUsername = async (req, reply) => {  // Delete user by username
   const { username } = req.params;
+  const currentUser = req.user.user_id;
+
+  const trx = await knex.transaction();
+
   try {
-    await knex("users").where({ username: username }).del();
-    reply.send({ message: `User ${username} has been removed` });
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    const deletedRows = await trx("user").where({ username }).del();
+
+    if (deletedRows) {
+      await trx.commit();
+      reply.send({ message: `User ${username} has been removed` });
+    } else {
+      reply.status(404).send({ message: 'User not found' });
+    }
   } catch (error) {
-    reply.send(error);
+    await trx.rollback();
+    reply.status(500).send({ message: 'Error deleting user', error: error.message });
   }
 };
 
-const updateUserById = async (req, reply) => {  //update user by id
-  const { email } = req.body;
-  const { password } = req.body;
-  const { name } = req.body;
-  const { username } = req.body;
+
+const updateUserById = async (req, reply) => {  // Update user by ID
+  const { email, password, name, username } = req.body;
   const { user_id } = req.params;
-  const { pbkdf2 } = await import("crypto");
-  const user = await knex("user").where({ user_id: user_id });
-  let userUpdate;
-  if (password != undefined) {
-    let hash = await new Promise((resolve, reject) => {
-      pbkdf2(
-        password,
-        '',//user[0].id,
-        100000,
-        64,
-        "sha512",
-        async (err, derivedKey) => {
-          if (err) throw err;
+  const currentUser = req.user.user_id;
+
+  const trx = await knex.transaction();
+
+  try {
+    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
+    const user = await trx("user").where({ user_id }).first();
+
+    if (!user) {
+      return reply.status(404).send({ message: 'User not found' });
+    }
+
+    if (password) {
+      const hash = await new Promise((resolve, reject) => {
+        pbkdf2(password, '', 100000, 64, "sha512", (err, derivedKey) => {
+          if (err) return reject(err);
           resolve(derivedKey.toString("hex"));
-        }
-      );
+        });
+      });
+      
+      await trx("user").where({ user_id }).update({
+        password: hash,
+        name: name || user.name,
+        email: email || user.email,
+        username: username || user.username,
+      });
+    } else {
+      await trx("user").where({ user_id }).update({
+        name: name || user.name,
+        email: email || user.email,
+        username: username || user.username,
+      });
+    }
+
+    await trx.commit();
+    reply.status(200).send({ message: `User ${user_id} has been updated` });
+  } catch (error) {
+    await trx.rollback();
+    reply.status(500).send({ message: 'Error updating user', error: error.message });
+  }
+};
+
+
+const loginUserByEmail = async (req, reply) => {  // Login user by email
+  const { email, password } = req.body;
+  
+  try {
+    const userData = await knex("user").select("*").where({ email }).first();
+
+    if (!userData) {
+      return reply.status(401).send({ message: 'Wrong Username or password.' });
+    }
+
+    const correct = await new Promise((resolve, reject) => {
+      pbkdf2(password, '', 100000, 64, "sha512", (err, derivedKey) => {
+        if (err) return reject(err);
+        resolve(derivedKey.toString("hex") === userData.password);
+      });
     });
-    try {
-      userUpdate = await knex("user")
-        .where({ user_id: user_id })
-        .update({
-          password: (await hash) || user[0].password,
-          user_id: user[0].user_id,
-          name: name || user[0].name,
-          email: email || user[0].email,
-          username: user[0].username,
-        });
-      reply.code(200).send({ message: `Successfull edit` });
-    } catch (error) {
-      reply.send(error);
+
+    if (correct) {
+      const token = fastify.jwt.sign({ user_id: userData.user_id, username: userData.username }, { expiresIn: "24h" });
+      reply.status(200).send({ message: 'Successful login!', jwt: token });
+    } else {
+      reply.status(401).send({ message: 'Wrong Username or password.' });
     }
-  } else {
-    try {
-      userUpdate = await knex("user")
-        .where({ username: username })
-        .update({
-          username: username || user[0].username,
-          name: name || user[0].name,
-        });
-      reply.send(userUpdate[0]);
-    } catch (error) {
-      reply.send(error);
+  } catch (error) {
+    reply.status(500).send({ message: 'Error logging in', error: error.message });
+  }
+};
+
+
+const loginUserByUsername = async (req, reply) => {  // Login user by username
+  const { username, password } = req.body;
+
+  try {
+    const userData = await knex("user").select("*").where({ username }).first();
+
+    if (!userData) {
+      return reply.status(401).send({ message: 'Wrong username or password.' });
     }
-  }
-};
 
-
-const loginUserByEmail = async (req, reply) => {  //login by email
-  const { email } = req.body;
-  const { password } = req.body;
-  try {
-    const userData = await knex("user").select("*").where({ email: email });
-    let hash;
-    if (userData.length > 0) {
-      let correct = await new Promise((resolve, reject) => {
-        pbkdf2(
-          password,
-          '',//userData[0].id,
-          100000,
-          64,
-          "sha512",
-          async (err, derivedKey) => {
-            if (err) throw err;
-            hash = derivedKey.toString("hex");
-            console.log("HASH: ", hash);
-            console.log("PASS: ", userData[0].password);
-
-            hash === userData[0].password ? resolve(true) : resolve(false);
-          }
-        );
+    const correctPassword = await new Promise((resolve, reject) => {
+      pbkdf2(password, username, 100000, 64, "sha512", (err, derivedKey) => {
+        if (err) return reject(err);
+        resolve(derivedKey.toString("hex") === userData.password);
       });
-      if (correct) {
-        const token = fastify.jwt.sign({ user_id: user.user_id, username: user.username }, { expiresIn: "24h" });
-        reply.code(201).send({ message: `Successfull login!`, jwt: token });
-      } else {
-        reply.code(201).send({ message: `Wrong Username or password.` });
-      }
-    } else reply.code(201).send({ message: `Wrong Username or password.` });
+    });
+
+    if (correctPassword) {
+      const token = fastify.jwt.sign({ user_id: userData.user_id, username: userData.username }, { expiresIn: '24h' });
+      return reply.status(200).send({ success: true, message: 'Successful login!', jwt: token });
+    } else {
+      return reply.status(401).send({ success: false, message: 'Wrong username or password.' });
+    }
   } catch (error) {
-    reply.send(error);
+    return reply.status(500).send({ success: false, message: error.message || 'Internal Server Error' });
   }
 };
 
-const loginUserByUsername = async (req, reply) => {  //login by username
-  const { username } = req.body;
-  const { password } = req.body;
+
+const checkAuth = async (request, reply) => {  // Check user authentication
+  const user_id = request.user.user_id;
   try {
-    const userData = await knex("user").select("*").where({ username: username });
-    let hash;
-    if (userData.length > 0) {
-      let correct = await new Promise((resolve, reject) => {
-        pbkdf2(
-          password,
-          '',//userData[0].id,
-          100000,
-          64,
-          "sha512",
-          async (err, derivedKey) => {
-            if (err) throw err;
-            hash = derivedKey.toString("hex");
-            console.log("HASH: ", hash);
-            console.log("PASS: ", userData[0].password);
-            hash === userData[0].password ? resolve(true) : resolve(false);
-          }
-        );
-      });
-      if (correct) {
-        const token = fastify.jwt.sign({ user_id: user.user_id, username: user.username }, { expiresIn: "24h" });
-        reply.code(201).send({ message: `Successfull login!`, jwt: token });
-      } else {
-        reply.code(201).send({ message: `Wrong Username or password.` });
-      }
-    } else reply.code(201).send({ message: `Wrong Username or password.` });
-  } catch (error) {
-    reply.send(error);
-  }
-};
-
-const checkAuth = async (request, reply) => {  //checkAuth
-  user_id = request.user;
-  const userInfo = await knex('user')  //get user info
+    const userInfo = await knex('user')
       .select(
         'user.username',
+        'role.role_id',
         'role.role_name',
         'role.role_desc',
+        'permission.permission_id',
         'permission.permission_name',
         'permission.permission_desc'
       )
@@ -233,10 +276,43 @@ const checkAuth = async (request, reply) => {  //checkAuth
       .leftJoin('role', 'user_role.role_id', 'role.role_id')
       .leftJoin('role_permission', 'role.role_id', 'role_permission.role_id')
       .leftJoin('permission', 'role_permission.permission_id', 'permission.permission_id')
-      .where('user.user_id', user_id)
+      .where('user.user_id', user_id);
 
-  reply.send(userInfo);
+    
+    const response = {  //group
+      username: userInfo[0]?.username,
+      roles: []
+    };
+
+    userInfo.forEach((row) => {
+      const { role_id, role_name, role_desc, permission_id, permission_name, permission_desc } = row;
+
+      
+      let role = response.roles.find(r => r.role_id === role_id);  //does it contain?
+      if (!role) {
+        role = {
+          role_id,
+          role_name,
+          role_desc,
+          permissions: []
+        };
+        response.roles.push(role);
+      }
+
+      
+      role.permissions.push({  //add
+        permission_id,
+        permission_name,
+        permission_desc
+      });
+    });
+
+    reply.send(response);
+  } catch (error) {
+    reply.status(500).send({ message: 'Error retrieving user info', error: error.message });
+  }
 };
+
 
 module.exports = {
   getUsers,
