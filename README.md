@@ -1,22 +1,15 @@
 # idopontfoglalo
 
+## Before running
+ - Download the latest version of PostgreSQL Database (https://www.postgresql.org/download/)
+ - Create a database named "idopontfoglalo"
+ - Make sure you changed the consts in the database.js and knexfile.js files to mach your own
+
 ## Getting started
+- Install dependencies: `npm install`
+- Run index.js (or write `node index.js` in terminal )
+- Seed the database with data: `npx knex seed:run`
 
-### `npm install`
-
-Install dependencies
-
-### `node index.js`
-
-To start the app in dev mode.
-
-### `npx knex seed:run`
-
-To seed the database with data
-
-### `npm test`
-
-Run tests
 
 ## Customize configuration
 
