@@ -1,15 +1,14 @@
+const { getAllUser, getSomeUserById, addSomeUser, hardDeleteSomeUser, softDeleteSomeUser, updateSomeUser, loginUser } = require("../utils/user_utils.js");
+
+
 const { knex } = require("../index.js");
 const { pbkdf2 } = require("crypto");
 const { fastify } = require("../index.js");
 
 
-const getUsers = async (req, reply) => {  // Get all users
-  try {
-    const users = await knex("user").select("*");
-    reply.send(users);
-  } catch (error) {
-    reply.status(500).send({ message: 'Error retrieving users', error: error.message });
-  }
+const getUsers = async (req, reply) => {  //get all users
+  const user = await getAllUser();
+  reply.send(user);
 };
 
 const getUserById = async (req, reply) => {  // Get user by ID
