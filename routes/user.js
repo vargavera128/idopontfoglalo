@@ -79,7 +79,7 @@ const {
       },
     },
     handler: addUser,
-    onRequest: [fastify.authenticate]
+    //onRequest: [fastify.authenticate]
   };
   
   const deleteItemOpts = {  //Options for Delete item
