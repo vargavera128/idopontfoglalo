@@ -1,6 +1,7 @@
 const {
     getUsers,
     getUserById,
+    getUserByUsername,
     addUser,
     deleteUserById,
     updateUserById,
@@ -47,6 +48,17 @@ const {
       },
     },
     handler: getUserById,
+    onRequest: [fastify.authenticate]
+  };
+
+  const getItemOptsU = {  // Options for get one item
+    schema: {
+      description: "Get user by username",
+      response: {
+        200: Item,
+      },
+    },
+    handler: getUserByUsername,
     onRequest: [fastify.authenticate]
   };
   
@@ -187,6 +199,7 @@ const {
   function UserRoutes(fastify, options, done) {
     fastify.get("/user", getItemsOpts);  // get -> get
     fastify.get("/user/:user_id", getItemOpts);
+    fastify.get("/user2/:username", getItemOptsU);
     fastify.get("/userEmail/:email", getUserOpts);
     fastify.post("/user", postItemOpts);   // post -> add
     fastify.delete("/user/:user_id", deleteItemOpts);  //delete -> delete

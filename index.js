@@ -80,8 +80,9 @@ const start = async () => {
     console.log("ERROR: TimescaleDB is not installed on the DB instance");
     process.exit(1);
   }
-
-  await knex.migrate.latest({ directory: "dbmigrations" });
+  const path = require("path");
+  await knex.migrate.latest({ directory: path.join(__dirname, "dbmigrations") });
+  
 
   fastify.register(user);
   fastify.register(timetable);

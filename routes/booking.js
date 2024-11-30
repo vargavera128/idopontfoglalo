@@ -1,7 +1,8 @@
 const {
     bookTime,
     getUserBookings,
-    deleteBooking
+    deleteBooking,
+    getBookedByTimetableid
 } = require("../controllers/booking.js");
 const { fastify } = require("../index.js");
 
@@ -85,12 +86,26 @@ const deleteBookingOpts = {
     handler: deleteBooking,
     onRequest: [fastify.authenticate],
 };
+const getBookingByTimetableID = {  // Options for getting user bookings
+    schema: {
+        description: "Gets all bookings by timatableid",
+        response: {
+            200: {
+                type: "array",
+                items: BookingResponseItem,
+            },
+        },
+    },
+    handler: getBookedByTimetableid,
+    onRequest: [fastify.authenticate],
+};
 
 
 function BookingRoutes(fastify, options, done) {  // Routes for booking and user bookings
     fastify.put("/book/:timetable_id", bookTimeOpts); 
     fastify.get("/user_bookings", getUserBookingsOpts); 
     fastify.delete("/delete_booking/:booking_id",deleteBookingOpts );
+    fastify.get("/booking/:timetable_id", getBookingByTimetableID);
     done();
 }
 

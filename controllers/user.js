@@ -26,6 +26,23 @@ const getUserById = async (req, reply) => {  // Get user by ID
   }
 };
 
+const getUserByUsername = async (req, reply) => {
+  const { username } = req.params;
+  try {
+    console.log("Searching for user:", username);  // Debugging log
+    const user = await knex("user").select("*").where({ username }).first();
+    if (user) {
+      reply.send(user);
+    } else {
+      reply.status(404).send({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error("Error retrieving user:", error);  // Debugging log
+    reply.status(500).send({ message: 'Error retrieving user', error: error.message });
+  }
+};
+
+
 
 const getUserByEmail = async (req, reply) => {  // Get user by email
   const { email } = req.params;
@@ -317,6 +334,7 @@ const checkAuth = async (request, reply) => {  // Check user authentication
 module.exports = {
   getUsers,
   getUserById,
+  getUserByUsername,
   addUser,
   deleteUserById,
   deleteUserByEmail,

@@ -71,11 +71,30 @@ const deleteBooking = async (req, reply) => {
         reply.code(500).send({ message: "Hiba történt a foglalás törlése során." });
     }
 };
+const getBookedByTimetableid = async (request, reply) => {
+  const { timetable_id } = request.params;
+
+  try {
+    const bookings = await knex('booking')
+      .select('*')  
+      .join('timetable', 'booking.timetable_id', '=', 'timetable.timetable_id')  
+      .where('booking.timetable_id', timetable_id)  
+      .andWhere('timetable.timetable_bool', true);  
+    if (bookings.length > 0) {
+      reply.send(bookings);
+    } else {
+      reply.status(404).send({ message: 'No bookings found for this timetable_id' });
+    }
+  } catch (error) {
+    reply.status(500).send({ message: 'Error retrieving bookings', error: error.message }); 
+  }
+};
 
 
 
 module.exports = {
   bookTime,
   getUserBookings,
-  deleteBooking
+  deleteBooking,
+  getBookedByTimetableid
 };
