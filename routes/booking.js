@@ -24,6 +24,7 @@ const BookingResponseItem = {  // Schema for user bookings response
         timetable_day: { type: "string" },
         start_time: { type: "string" },
         end_time: { type: "string" },
+        username: {type: "string"}
     },
 };
 

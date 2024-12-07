@@ -197,14 +197,14 @@ const {
 
 
   function UserRoutes(fastify, options, done) {
-    fastify.get("/user", getItemsOpts);  // get -> get
+    fastify.get("/user", getItemsOpts);  
     fastify.get("/user/:user_id", getItemOpts);
     fastify.get("/user2/:username", getItemOptsU);
     fastify.get("/userEmail/:email", getUserOpts);
-    fastify.post("/user", postItemOpts);   // post -> add
-    fastify.delete("/user/:user_id", deleteItemOpts);  //delete -> delete
-    fastify.put("/user/:user_id", updateItemOpts);  //put -> update
-    fastify.post("/user/login", loginUserOpts);  // post -> add
+    fastify.post("/user", postItemOpts);   
+    fastify.delete("/user/:user_id", deleteItemOpts);  
+    fastify.put("/user/:user_id", updateItemOpts);  
+    fastify.post("/user/login", loginUserOpts);  
     fastify.post("/user/loginUsername", loginUserOptsUsername)
     fastify.get("/checkAuth",checkAuthOpts)
   
