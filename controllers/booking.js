@@ -39,9 +39,10 @@ const getUserBookings = async (req, reply) => {
     const userId = req.user.user_id; 
     try {
         const bookings = await knex("booking")
-            .select("booking.booking_id", "subject.subject_name", "timetable.timetable_day", "timetable.start_time", "timetable.end_time")
+            .select("booking.booking_id", "subject.subject_name", "timetable.timetable_day", "timetable.start_time", "timetable.end_time", "user.username")
             .leftJoin("timetable", "booking.timetable_id", "timetable.timetable_id")
             .leftJoin("subject", "timetable.subject_id", "subject.subject_id") 
+            .leftJoin("user", "booking.user_id", "user.user_id")
             .where("booking.user_id", userId);
         
         reply.send(bookings);
