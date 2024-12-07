@@ -203,31 +203,34 @@ const updateUserById = async (req, reply) => {  // Update user by ID
 
 const loginUserByEmail = async (req, reply) => {  // Login user by email
   const { email, password } = req.body;
-  
+
   try {
     const userData = await knex("user").select("*").where({ email }).first();
 
     if (!userData) {
-      return reply.status(401).send({ message: 'Wrong Username or password.' });
+      return reply.status(401).send({ message: 'Wrong email or password.' });
     }
 
-    const correct = await new Promise((resolve, reject) => {
-      pbkdf2(password, '', 100000, 64, "sha512", (err, derivedKey) => {
+    const { username } = userData;
+    
+    const correctPassword = await new Promise((resolve, reject) => {
+      pbkdf2(password, username, 100000, 64, "sha512", (err, derivedKey) => {
         if (err) return reject(err);
         resolve(derivedKey.toString("hex") === userData.password);
       });
     });
 
-    if (correct) {
-      const token = fastify.jwt.sign({ user_id: userData.user_id, username: userData.username }, { expiresIn: "24h" });
-      reply.status(200).send({ message: 'Successful login!', jwt: token });
+    if (correctPassword) {
+      const token = fastify.jwt.sign({ user_id: userData.user_id, username: userData.username }, { expiresIn: '24h' });
+      return reply.status(200).send({ success: true, message: 'Successful login!', jwt: token });
     } else {
-      reply.status(401).send({ message: 'Wrong Username or password.' });
+      return reply.status(401).send({ success: false, message: 'Wrong email or password.' });
     }
   } catch (error) {
-    reply.status(500).send({ message: 'Error logging in', error: error.message });
+    return reply.status(500).send({ success: false, message: error.message || 'Internal Server Error' });
   }
 };
+
 
 
 const loginUserByUsername = async (req, reply) => {  // Login user by username
