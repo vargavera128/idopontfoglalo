@@ -49,11 +49,6 @@ const addUser = async (req, reply) => {  // Add new user
     return reply.status(400).send({ message: 'All fields are required.' });
   }
 
-  const currentUser = req.user?.user_id;
-  if (!currentUser) {
-    return reply.status(401).send({ message: 'User not authenticated.' });
-  }
-
   try {
     const hash = await new Promise((resolve, reject) => {
       pbkdf2(password, '', 100000, 64, "sha512", (err, derivedKey) => {
@@ -63,7 +58,6 @@ const addUser = async (req, reply) => {  // Add new user
     });
 
     const trx = await knex.transaction();
-    await trx.raw(`SET LOCAL "myapp.current_user" = '${currentUser}'`);
 
     await trx("user").insert({
       email: email.toLowerCase(),
