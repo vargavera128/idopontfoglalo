@@ -258,6 +258,7 @@ const loginUserByUsername = async (req, reply) => {  // Login user by username
       pbkdf2(password, username, 100000, 64, "sha512", (err, derivedKey) => {
         if (err) return reject(err);
         resolve(derivedKey.toString("hex") === userData.password);
+        console.log(userData.password);
       });
     });
 
