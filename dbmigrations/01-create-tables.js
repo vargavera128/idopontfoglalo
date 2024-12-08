@@ -43,12 +43,6 @@ exports.up = function (knex) {
           table.string("permission_desc");
           table.timestamp("created_at", { useTz: true }).notNullable();
       })
-      /*.createTable("user_subject", (table) => {  //create user_subject table
-          table.increments("user_subject_id").primary();
-          table.integer("user_id").references("user_id").inTable("user").onDelete('CASCADE').onUpdate('CASCADE');
-          table.integer("subject_id").references("subject_id").inTable("subject").onDelete('CASCADE').onUpdate('CASCADE');
-          table.timestamp("created_at", { useTz: true }).notNullable();
-      })*/
       .createTable("user_log", (table) => {  //create user_log table
           table.increments("user_log_id").primary();
           table.integer("user_id").references("user_id").inTable("user").onDelete('CASCADE').onUpdate('CASCADE');
@@ -85,15 +79,6 @@ exports.up = function (knex) {
           table.integer("created_by");
           table.timestamp("created_at", { useTz: true }).notNullable();
       })
-      /*.createTable("user_subject_log", (table) => {  //create user_subject_log table
-          table.increments("user_subject_log_id").primary();
-          table.integer("user_subject_id").references("user_subject_id").inTable("user_subject").onDelete('CASCADE').onUpdate('CASCADE');
-          table.integer("user_id").references("user_id").inTable("user").onDelete('CASCADE').onUpdate('CASCADE');
-          table.integer("subject_id").references("subject_id").inTable("subject").onDelete('CASCADE').onUpdate('CASCADE');
-          table.string("operation");
-          table.integer("created_by");
-          table.timestamp("created_at", { useTz: true }).notNullable();
-      })*/
       .createTable("role_permission", (table) => {  //create role_permission table
           table.increments("role_permission_id").primary();
           table.integer("role_id").references("role_id").inTable("role").onDelete('CASCADE').onUpdate('CASCADE');
